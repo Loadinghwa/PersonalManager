@@ -7,7 +7,7 @@
         android:id="@+id/zxingview"
         style="@style/MatchMatch"
         app:qrcv_animTime="2000"
-        app:qrcv_barCodeTipText="将条码放入框内，即可自动扫描"
+        app:qrcv_barCodeTipText="@string/barcode"
         app:qrcv_borderColor="@android:color/white"
         app:qrcv_borderSize="1dp"
         app:qrcv_cornerColor="#f57257"
@@ -22,7 +22,7 @@
         app:qrcv_isShowTipTextAsSingleLine="false"
         app:qrcv_isTipTextBelowRect="false"
         app:qrcv_maskColor="#33FFFFFF"
-        app:qrcv_qrCodeTipText="将二维码放入框内，即可自动扫描"
+        app:qrcv_qrCodeTipText="@string/qrcode"
         app:qrcv_rectWidth="200dp"
         app:qrcv_scanLineColor="#f57257"
         app:qrcv_scanLineMargin="0dp"
@@ -42,24 +42,24 @@
             <TextView
                 android:id="@+id/start_spot"
                 style="@style/AutoWrapTv"
-                android:text="开始识别"
+                android:text="@string/start_identify"
                 android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/stop_spot"
                 style="@style/AutoWrapTv"
-                android:text="暂停识别"
+                android:text="@string/stop_identify"
                 android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/open_flashlight"
                 style="@style/AutoWrapTv"
-                android:text="开灯"/>
+                android:text="@string/open_light"/>
 
             <TextView
                 android:id="@+id/close_flashlight"
                 style="@style/AutoWrapTv"
-                android:text="关灯"/>
+                android:text="@string/close_light"/>
 
         </LinearLayout>
 
@@ -67,16 +67,15 @@
 
     <RelativeLayout
         android:id="@+id/rl_back"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="30dp"
-        android:onClick="onClick"
-        android:layout_marginLeft="10dp">
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:onClick="onClick">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/icon_back"/>
+            android:src="@drawable/icon_back"
+            android:layout_marginStart="16dp"/>
     </RelativeLayout>
 </RelativeLayout>

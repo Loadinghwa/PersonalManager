@@ -11,4 +11,11 @@
     <string name="activity_add_date">添加新日子</string>
     <string name="activity_alarm">闹钟提醒</string>
     <string name="activity_balance">个人收支</string>
+    <string name="barcode">将条形码放入框内，即可自动扫描</string>
+    <string name="qrcode">将二维码放入框内，即可自动扫描</string>
+    <string name="start_identify">开始识别</string>
+    <string name="stop_identify">暂停识别</string>
+    <string name="open_light">开灯</string>
+    <string name="close_light">关灯</string>
+
 </resources>
