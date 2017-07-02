@@ -3,6 +3,7 @@ package com.zucc.ldh1135.secretary;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -15,13 +16,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.cocosw.bottomsheet.BottomSheet;
+import com.zucc.ldh1135.secretary.DateManager.AddDateActivity;
 import com.zucc.ldh1135.secretary.DateManager.Fragment_Affairs;
 import com.zucc.ldh1135.secretary.DateManager.Fragment_All;
 import com.zucc.ldh1135.secretary.DateManager.Fragment_Plan;
@@ -32,11 +33,11 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
-
     private DrawerLayout mDrawerLayout;
     private Toolbar toolbar;
     private NavigationView navView;
-    private Database database; //
+    private Database database;
+    private FloatingActionButton fab_add;
 
     private TabLayout tabs;
     private ViewPager viewPager;
@@ -67,32 +68,41 @@ public class MainActivity extends AppCompatActivity {
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent;
                 switch(item.getItemId()){
                     case R.id.nav_note:
-
+                        intent = new Intent(MainActivity.this,BalanceActivity.class);
+                        startActivity(intent);
+                        break;
                     case R.id.nav_alarm:
-
+                        intent = new Intent(MainActivity.this,AlarmActivity.class);
+                        startActivity(intent);
+                        break;
                     case R.id.nav_settings:
+                        intent = new Intent(MainActivity.this,SettingsActivity.class);
+                        startActivity(intent);
+                        break;
                 }
                 return true;
             }
         });
 
-        /*
-        findViewById(R.id.icon_scan).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        */
-
         //数据库初始化
         database = new Database(this,"Database.db",null,1);
         database.getWritableDatabase();
+
+        fab_add = (FloatingActionButton) findViewById(R.id.fab);
+        fab_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddDateActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
-    public void changeBackground(){
+    //更改背景
+    public void changeBackground(View v){
         new BottomSheet.Builder(MainActivity.this).title("title").sheet(R.menu.bottomsheet_menu).listener(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -156,11 +166,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //toolbar
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.toolbar_main,menu);
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.scan:
+                Intent intent = new Intent(MainActivity.this,ScanActivity.class);
+                startActivity(intent);
                 break;
             default:
         }

@@ -5,4 +5,10 @@
     <string name="alarm_remind">闹钟提醒</string>
     <string name="system_settings">系统设置</string>
     <string name="change_background">更换背景</string>
+    <string name="toolbar_scan">Scan</string>
+    <string name="toolbar_save">Save</string>
+    <string name="activity_settings">设置</string>
+    <string name="activity_add_date">添加新日子</string>
+    <string name="activity_alarm">闹钟提醒</string>
+    <string name="activity_balance">个人收支</string>
 </resources>
