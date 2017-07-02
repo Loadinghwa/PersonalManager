@@ -10,4 +10,50 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+    <style name="MatchMatch">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="WrapMatch">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="MatchWrap">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="WrapMatch.Vertical">
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="MatchWrap.Vertical">
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="MatchWrap.Horizontal">
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="AutoWrap">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="AutoWrapTv" parent="AutoWrap">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/selector_btn_orange</item>
+        <item name="android:layout_margin">45dp</item>
+        <item name="android:onClick">onClick</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
 </resources>

@@ -1,6 +1,7 @@
 package com.zucc.ldh1135.secretary;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -77,12 +78,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*
         findViewById(R.id.icon_scan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
             }
         });
+        */
 
         //数据库初始化
         database = new Database(this,"Database.db",null,1);

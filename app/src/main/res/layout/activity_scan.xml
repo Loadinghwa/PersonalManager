@@ -1,9 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.zucc.ldh1135.secretary.ScanActivity">
+<RelativeLayout style="@style/MatchMatch"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</android.support.constraint.ConstraintLayout>
+    <cn.bingoogolapple.qrcode.zxing.ZXingView
+        android:id="@+id/zxingview"
+        style="@style/MatchMatch"
+        app:qrcv_animTime="2000"
+        app:qrcv_barCodeTipText="将条码放入框内，即可自动扫描"
+        app:qrcv_borderColor="@android:color/white"
+        app:qrcv_borderSize="1dp"
+        app:qrcv_cornerColor="#f57257"
+        app:qrcv_cornerLength="20dp"
+        app:qrcv_cornerSize="3dp"
+        app:qrcv_isBarcode="false"
+        app:qrcv_isOnlyDecodeScanBoxArea="true"
+        app:qrcv_isScanLineReverse="true"
+        app:qrcv_isShowDefaultGridScanLineDrawable="true"
+        app:qrcv_isShowDefaultScanLineDrawable="false"
+        app:qrcv_isShowTipBackground="true"
+        app:qrcv_isShowTipTextAsSingleLine="false"
+        app:qrcv_isTipTextBelowRect="false"
+        app:qrcv_maskColor="#33FFFFFF"
+        app:qrcv_qrCodeTipText="将二维码放入框内，即可自动扫描"
+        app:qrcv_rectWidth="200dp"
+        app:qrcv_scanLineColor="#f57257"
+        app:qrcv_scanLineMargin="0dp"
+        app:qrcv_scanLineSize="1dp"
+        app:qrcv_tipTextColor="@android:color/white"
+        app:qrcv_tipTextSize="12sp"
+        app:qrcv_toolbarHeight="0dp"
+        app:qrcv_topOffset="180dp"/>
+
+    <LinearLayout
+        style="@style/MatchWrap.Vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp">
+
+        <LinearLayout style="@style/MatchWrap.Horizontal">
+
+            <TextView
+                android:id="@+id/start_spot"
+                style="@style/AutoWrapTv"
+                android:text="开始识别"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/stop_spot"
+                style="@style/AutoWrapTv"
+                android:text="暂停识别"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/open_flashlight"
+                style="@style/AutoWrapTv"
+                android:text="开灯"/>
+
+            <TextView
+                android:id="@+id/close_flashlight"
+                style="@style/AutoWrapTv"
+                android:text="关灯"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_back"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="30dp"
+        android:onClick="onClick"
+        android:layout_marginLeft="10dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_back"/>
+    </RelativeLayout>
+</RelativeLayout>

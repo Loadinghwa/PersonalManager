@@ -19,7 +19,7 @@
         <activity android:name=".AlarmActivity" />
         <activity android:name=".BalanceActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".ScanActivity"></activity>
+        <activity android:name=".ScanActivity"/>
     </application>
 
 </manifest>
