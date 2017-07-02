@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">个人助理</string>
+    <string name="personal_balance">个人收支</string>
+    <string name="data_manage">日程管理</string>
+    <string name="alarm_remind">闹钟提醒</string>
+    <string name="system_settings">系统设置</string>
+    <string name="change_background">更换背景</string>
+</resources>
