@@ -24,4 +24,129 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <ScrollView
+        android:layout_below="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_date_title"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:layout_marginStart="16dp"/>
+
+                <EditText
+                    android:id="@+id/add_date_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/add_date_input_title"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="16dp"
+                    android:textColorHint="#AAAAAA"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_date"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_date_date"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:layout_marginStart="16dp"/>
+
+                <TextView
+                    android:id="@+id/current_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:textSize="20sp"
+                    android:layout_marginEnd="16dp">
+
+                </TextView>
+
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_type"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_date_type"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:layout_marginStart="16dp"/>
+
+                <TextView
+                    android:id="@+id/add_date_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_date_add_type"
+                    android:textSize="20sp"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="16dp"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_date_note"
+                    android:textSize="20sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"/>
+
+                <EditText
+                    android:id="@+id/add_date_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="128dp"
+                    android:background="@drawable/bg_edittext_normal"
+                    android:padding="5dip"
+                    android:textColorHint="#AAAAAA"
+                    android:textSize="16sp"
+                    android:hint="@string/activity_add_date_event"
+                    android:gravity="top"
+                    android:layout_marginTop="56dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:maxLines="7"/>
+
+
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
 </RelativeLayout>

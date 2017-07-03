@@ -15,11 +15,10 @@ public class Database extends SQLiteOpenHelper {
 
     public static final String CREATE_DATE = "create table Date ("
             + "id integer primary key autoincrement, "
-            + "event text, "
-            + "time text, "
-            + "notice blob, "
-            + "note text, "   //备注
-            + "top blob)";
+            + "title text, "    //事件标题
+            + "time text, "    //时间
+            + "event text) ";   //事件内容
+
     public static final String CREATE_NOTEPAD = "create table Notepad ("
             + "id integer primary key autoincrement, "
             + "balance integer, "  //收支数额

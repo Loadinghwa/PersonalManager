@@ -17,5 +17,11 @@
     <string name="stop_identify">暂停识别</string>
     <string name="open_light">开灯</string>
     <string name="close_light">关灯</string>
-
+    <string name="add_date_title">标题</string>
+    <string name="add_date_input_title">点击这里输入事件的标题</string>
+    <string name="add_date_date">日期</string>
+    <string name="add_date_type">分类</string>
+    <string name="add_date_add_type">计划</string>
+    <string name="add_date_note">备注</string>
+    <string name="activity_add_date_event">点击这里输入事件的内容</string>
 </resources>
