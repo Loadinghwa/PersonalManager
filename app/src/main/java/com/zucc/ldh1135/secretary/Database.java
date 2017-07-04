@@ -13,13 +13,14 @@ import java.sql.SQLData;
 
 public class Database extends SQLiteOpenHelper {
 
-    public static final String CREATE_DATE = "create table Date ("
+    private static final String CREATE_DATE = "create table Date ("
             + "id integer primary key autoincrement, "
             + "title text, "    //事件标题
             + "time text, "    //时间
+            + "type text,"
             + "event text) ";   //事件内容
 
-    public static final String CREATE_NOTEPAD = "create table Notepad ("
+    private static final String CREATE_NOTEPAD = "create table Notepad ("
             + "id integer primary key autoincrement, "
             + "balance integer, "  //收支数额
             + "type text, "   //收支类型
@@ -41,6 +42,7 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion){
-
+        //db.execSQL("drop table if exists DATE");
+        //db.execSQL("drop table if exists NOTEPAD");
     }
 }

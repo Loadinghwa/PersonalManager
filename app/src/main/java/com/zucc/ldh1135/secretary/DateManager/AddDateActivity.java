@@ -15,18 +15,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.zucc.ldh1135.secretary.Database;
 import com.zucc.ldh1135.secretary.R;
 
-import org.w3c.dom.Text;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
 
 public class AddDateActivity extends AppCompatActivity {
 
@@ -35,17 +36,19 @@ public class AddDateActivity extends AppCompatActivity {
     private TextView textView_time;
     private TextView textView_title;
     private TextView textView_event;
+    private TextView textView_type;
     private Calendar cal;
     private int year,month,day;
     Date date;
     SimpleDateFormat sDate;
     String dateNow;
+    SQLiteDatabase db;
+    private int database_version = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_date);
-        dbHelper = new Database(this,"Database.db",null,2);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -61,10 +64,12 @@ public class AddDateActivity extends AppCompatActivity {
 
         textView_title = (TextView) findViewById(R.id.add_date_title);
         textView_event = (TextView) findViewById(R.id.add_date_event);
+        textView_type = (TextView) findViewById(R.id.add_date_type);
         textView_time = (TextView) findViewById(R.id.current_date);
         textView_time.setText(dateNow);
 
         getDate();
+
         textView_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,7 +125,8 @@ public class AddDateActivity extends AppCompatActivity {
             }
         });
 
-
+        dbHelper = new Database(this,"Database.db",null,database_version);
+        db = dbHelper.getWritableDatabase();
     }
 
     //获取当前日期
@@ -130,7 +136,7 @@ public class AddDateActivity extends AppCompatActivity {
         Log.i("wxy","year"+year);
         month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
         day=cal.get(Calendar.DAY_OF_MONTH);
-        textView_time.setText(year+"-"+month+"-"+day);
+        //textView_time.setText(year+"-"+month+"-"+day);
     }
 
     @Override
@@ -143,15 +149,17 @@ public class AddDateActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.save:
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
                 ContentValues values = new ContentValues();
                 String event = textView_event.getText().toString();
                 String title = textView_title.getText().toString();
                 String time = textView_time.getText().toString();
+                String type = textView_type.getText().toString();
                 values.put("title",title);
                 values.put("time",time);
                 values.put("event",event);
+                values.put("type",type);
                 db.insert("Date",null,values);
+                Toast.makeText(this,"添加成功",Toast.LENGTH_SHORT).show();
                 finish();
                 break;
             case android.R.id.home:

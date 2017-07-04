@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navView;
     private Database database;
     private FloatingActionButton fab_add;
+    private int database_version = 1;
 
     private TabLayout tabs;
     private ViewPager viewPager;
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //数据库初始化
-        database = new Database(this,"Database.db",null,1);
+        database = new Database(this,"Database.db",null,database_version);
         database.getWritableDatabase();
 
         fab_add = (FloatingActionButton) findViewById(R.id.fab);
@@ -130,11 +131,11 @@ public class MainActivity extends AppCompatActivity {
         mFragment.add(new Fragment_Affairs());
     }
 
-    class MyAdapter extends FragmentPagerAdapter {
+    private class MyAdapter extends FragmentPagerAdapter {
         private List<String> title;
         private List<Fragment> views;
 
-        public MyAdapter(FragmentManager fm, List<String> title, List<Fragment> views) {
+        private MyAdapter(FragmentManager fm, List<String> title, List<Fragment> views) {
             super(fm);
             this.title = title;
             this.views = views;
