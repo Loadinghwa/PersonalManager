@@ -24,4 +24,5 @@
     <string name="add_date_add_type">计划</string>
     <string name="add_date_note">备注</string>
     <string name="activity_add_date_event">点击这里输入事件的内容</string>
+    <string name="toolbar_edit">编辑</string>
 </resources>

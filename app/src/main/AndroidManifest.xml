@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zucc.ldh1135.secretary">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/secretary"
@@ -19,22 +24,19 @@
         </activity>
         <activity
             android:name=".AlarmActivity"
-            android:label="@string/activity_alarm"/>
+            android:label="@string/activity_alarm" />
         <activity
             android:name=".BalanceActivity"
-            android:label="@string/activity_balance"/>
+            android:label="@string/activity_balance" />
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/activity_settings"/>
-        <activity android:name=".ScanActivity"/>
+            android:label="@string/activity_settings" />
+        <activity android:name=".ScanActivity" />
         <activity
             android:name=".DateManager.AddDateActivity"
-            android:label="@string/activity_add_date"/>
+            android:label="@string/activity_add_date" />
+        <activity android:name=".DateManager.DetailDateActivity" />
+        <activity android:name=".DateManager.EditDateActivity"></activity>
     </application>
-
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

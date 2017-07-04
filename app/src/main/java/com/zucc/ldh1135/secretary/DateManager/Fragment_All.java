@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,39 +29,57 @@ import java.util.List;
 public class Fragment_All extends Fragment {
     private int database_version = 1;
     private Database dbHelper;
-    private TextView textView_date;
+
+    Date date_event;
 
     private List<Date> dateList = new ArrayList<>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_all,container,false);
 
-        textView_date = (TextView) view.findViewById(R.id.date);
         dbHelper = new Database(getActivity(),"Database.db",null,database_version);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query("Date",null,null,null,null,null,null);
         if(cursor.moveToFirst()){
             do{
                 String title = cursor.getString(cursor.getColumnIndex("title"));
-                String event = cursor.getString(cursor.getColumnIndex("event"));
                 String date = cursor.getString(cursor.getColumnIndex("time"));
-                textView_date.setText(date);
+                date_event = new Date(title,date);
+                dateList.add(date_event);
+
             }while(cursor.moveToNext());
         }
 
         cursor.close();
 
+        DateAdapter dateAdapter = new DateAdapter(getActivity(),R.layout.listview_all,dateList);
+        ListView listView = (ListView) view.findViewById(R.id.listview_all);
+        listView.setAdapter(dateAdapter);
+        listView.setAdapter(dateAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Date date = dateList.get(position);
+                Toast.makeText(getActivity(),date.getTitle(),Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return view;
     }
 
 
-    public class Date{
+    private class Date{
         String title;
         String date;
         String type;
         String event;
 
-        Date(String title,String date,String type,String event){
+        private Date(String title,String date){
+            this.title = title;
+            this.date = date;
+        }
+
+        private Date(String title,String date,String type,String event){
             this.title = title;
             this.date = date;
             this.type = type;
@@ -96,8 +116,19 @@ public class Fragment_All extends Fragment {
         public View getView(int position,View convertView,ViewGroup parent){
             Date date = getItem(position);
             View view = LayoutInflater.from(getContext()).inflate(resourceId,parent,false);
+            if(convertView == null)
+            {
+                view = LayoutInflater.from(getContext()).inflate(resourceId,parent,false);
+            }
+            else
+            {
+                view = convertView;
+            }
+            TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
+            TextView tv_date = (TextView) view.findViewById(R.id.tv_date);
 
-            //
+            tv_title.setText(date_event.getTitle());
+            tv_date.setText(date_event.getDate());
 
             return view;
         }
