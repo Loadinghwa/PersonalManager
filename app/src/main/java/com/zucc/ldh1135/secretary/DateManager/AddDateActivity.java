@@ -94,14 +94,14 @@ public class AddDateActivity extends AppCompatActivity {
 
 
         findViewById(R.id.frame_type).setOnClickListener(new View.OnClickListener() {
-            TextView text_event = (TextView) findViewById(R.id.add_date_event);
+            TextView text_type = (TextView) findViewById(R.id.add_date_type);
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(AddDateActivity.this);
                 builder.setIcon(R.drawable.icon_type);
                 builder.setTitle("分类");
                 //    指定下拉列表的显示数据
-                final String[] cities = {"计划", "工作", "事件"};
+                final String[] cities = {"计划", "工作", "事务"};
                 //    设置一个下拉的列表选择项
                 builder.setItems(cities, new DialogInterface.OnClickListener()
                 {
@@ -110,13 +110,13 @@ public class AddDateActivity extends AppCompatActivity {
                     {
                         switch(which){
                             case 0:
-                                text_event.setText("计划");
+                                text_type.setText("计划");
                                 break;
                             case 1:
-                                text_event.setText("工作");
+                                text_type.setText("工作");
                                 break;
                             case 2:
-                                text_event.setText("事件");
+                                text_type.setText("事务");
                                 break;
                         }
                     }

@@ -1,18 +1,14 @@
 package com.zucc.ldh1135.secretary.DateManager;
 
-import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.text.Layout;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,18 +19,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Loading~ on 2017/7/1.
+ * Created by Loading~ on 2017/7/4.
  */
 
 public class Fragment_All extends Fragment {
+
     private int database_version = 1;
     private Database dbHelper;
 
+    String title,date,type;
     Date date_event;
 
     private List<Date> dateList = new ArrayList<>();
 
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_all,container,false);
 
         dbHelper = new Database(getActivity(),"Database.db",null,database_version);
@@ -42,8 +42,8 @@ public class Fragment_All extends Fragment {
         Cursor cursor = db.query("Date",null,null,null,null,null,null);
         if(cursor.moveToFirst()){
             do{
-                String title = cursor.getString(cursor.getColumnIndex("title"));
-                String date = cursor.getString(cursor.getColumnIndex("time"));
+                title = cursor.getString(cursor.getColumnIndex("title"));
+                date = cursor.getString(cursor.getColumnIndex("time"));
                 date_event = new Date(title,date);
                 dateList.add(date_event);
 
@@ -52,21 +52,14 @@ public class Fragment_All extends Fragment {
 
         cursor.close();
 
-        DateAdapter dateAdapter = new DateAdapter(getActivity(),R.layout.listview_all,dateList);
-        ListView listView = (ListView) view.findViewById(R.id.listview_all);
-        listView.setAdapter(dateAdapter);
-        listView.setAdapter(dateAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Date date = dateList.get(position);
-                Toast.makeText(getActivity(),date.getTitle(),Toast.LENGTH_SHORT).show();
-            }
-        });
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_all);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        DateAdapter dateAdapter = new DateAdapter(dateList);
+        recyclerView.setAdapter(dateAdapter);
 
         return view;
     }
-
 
     private class Date{
         String title;
@@ -103,35 +96,55 @@ public class Fragment_All extends Fragment {
         }
     }
 
-    public class DateAdapter extends ArrayAdapter<Date>{
+    public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>{
 
-        private int resourceId;
+        private List<Date> mDateList;
 
-        public DateAdapter(Context context, int textViewResourceId,List<Date> objects){
-            super(context,textViewResourceId,objects);
-            resourceId = textViewResourceId;
+        public class ViewHolder extends RecyclerView.ViewHolder{
+            View dateView;
+            TextView tv_title;
+            TextView tv_date;
+
+            public ViewHolder(View view){
+                super(view);
+                dateView = view;
+                tv_title = (TextView) view.findViewById(R.id.tv_title);
+                tv_date = (TextView) view.findViewById(R.id.tv_date);
+            }
+        }
+
+        public DateAdapter(List<Date> dateList){
+            mDateList = dateList;
         }
 
         @Override
-        public View getView(int position,View convertView,ViewGroup parent){
-            Date date = getItem(position);
-            View view = LayoutInflater.from(getContext()).inflate(resourceId,parent,false);
-            if(convertView == null)
-            {
-                view = LayoutInflater.from(getContext()).inflate(resourceId,parent,false);
-            }
-            else
-            {
-                view = convertView;
-            }
-            TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
-            TextView tv_date = (TextView) view.findViewById(R.id.tv_date);
+        public ViewHolder onCreateViewHolder(ViewGroup parent,int viewType){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycleview_all,parent,false);
+            final ViewHolder holder = new ViewHolder(view);
+            holder.dateView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = holder.getAdapterPosition();
+                    Date date = mDateList.get(position);
+                    Toast.makeText(v.getContext(),date.getTitle(),Toast.LENGTH_SHORT).show();
+                }
+            });
 
-            tv_title.setText(date_event.getTitle());
-            tv_date.setText(date_event.getDate());
+            return holder;
+        }
 
-            return view;
+        @Override
+        public void onBindViewHolder(ViewHolder holder,int position){
+            Date date = mDateList.get(position);
+            holder.tv_title.setText(date.getTitle());
+            holder.tv_date.setText(date.getDate());
+        }
+
+        @Override
+        public int getItemCount(){
+            return mDateList.size();
         }
     }
+
 
 }

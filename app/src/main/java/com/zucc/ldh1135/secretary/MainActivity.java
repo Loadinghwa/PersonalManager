@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         initView();
         MyAdapter adapter = new MyAdapter(getSupportFragmentManager(), mTitle, mFragment);
+        viewPager.setOffscreenPageLimit(4);     //禁止切换页面时重新加载
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);
         tabs.setTabsFromPagerAdapter(adapter);
