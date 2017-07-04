@@ -1,9 +1,11 @@
 package com.zucc.ldh1135.secretary.DateManager;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.zucc.ldh1135.secretary.Database;
 import com.zucc.ldh1135.secretary.R;
 
@@ -37,6 +40,7 @@ public class Fragment_All extends Fragment {
         super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_all,container,false);
 
+        dateList.clear();
         dbHelper = new Database(getActivity(),"Database.db",null,database_version);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query("Date",null,null,null,null,null,null);
@@ -98,15 +102,19 @@ public class Fragment_All extends Fragment {
 
     public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>{
 
+        private Context mContext;
+
         private List<Date> mDateList;
 
         public class ViewHolder extends RecyclerView.ViewHolder{
+            CardView cardView;
             View dateView;
             TextView tv_title;
             TextView tv_date;
 
             public ViewHolder(View view){
                 super(view);
+                cardView = (CardView) view;
                 dateView = view;
                 tv_title = (TextView) view.findViewById(R.id.tv_title);
                 tv_date = (TextView) view.findViewById(R.id.tv_date);
@@ -119,6 +127,9 @@ public class Fragment_All extends Fragment {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent,int viewType){
+            if(mContext == null){
+                mContext = parent.getContext();
+            }
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycleview_all,parent,false);
             final ViewHolder holder = new ViewHolder(view);
             holder.dateView.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +149,7 @@ public class Fragment_All extends Fragment {
             Date date = mDateList.get(position);
             holder.tv_title.setText(date.getTitle());
             holder.tv_date.setText(date.getDate());
+            //Glide.with(mContext).load(date.getImageId()).into(holder.dateImage);
         }
 
         @Override

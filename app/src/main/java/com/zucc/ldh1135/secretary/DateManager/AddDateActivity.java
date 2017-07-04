@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 
 import com.zucc.ldh1135.secretary.Database;
+import com.zucc.ldh1135.secretary.MainActivity;
 import com.zucc.ldh1135.secretary.R;
 
 

@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
         initView();
         MyAdapter adapter = new MyAdapter(getSupportFragmentManager(), mTitle, mFragment);
-        viewPager.setOffscreenPageLimit(4);     //禁止切换页面时重新加载
+        //viewPager.setOffscreenPageLimit(4);     //禁止切换页面时重新加载
+
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);
         tabs.setTabsFromPagerAdapter(adapter);
@@ -110,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case R.id.bottomsheet_image:
-                        Toast.makeText(getApplicationContext(),"success!",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),"success!",Toast.LENGTH_SHORT).show();
+
                         break;
                 }
             }
@@ -184,6 +186,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.scan:
                 Intent intent = new Intent(MainActivity.this,ScanActivity.class);
+                startActivity(intent);
+                intent = getIntent();
+                overridePendingTransition(0, 0);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                finish();
+                overridePendingTransition(0, 0);
                 startActivity(intent);
                 break;
             default:
