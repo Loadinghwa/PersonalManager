@@ -113,6 +113,67 @@
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/frame_priority"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_date_priority"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:layout_marginStart="16dp"/>
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="16dp">
+
+                    <RadioButton
+                        android:id="@+id/radiobtn_none"
+                        android:text="@string/radiobtn_none"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"/>
+
+                    <RadioButton
+                        android:id="@+id/radiobtn_first"
+                        android:text="@string/radiobtn_first"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"/>
+
+                    <RadioButton
+                        android:id="@+id/radiobtn_second"
+                        android:text="@string/radiobtn_second"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"/>
+
+                    <RadioButton
+                        android:id="@+id/radiobtn_third"
+                        android:text="@string/radiobtn_third"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"/>
+
+                </RadioGroup>
+
+            </FrameLayout>
+
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/border">

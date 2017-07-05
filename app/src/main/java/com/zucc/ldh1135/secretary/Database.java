@@ -18,6 +18,7 @@ public class Database extends SQLiteOpenHelper {
             + "title text, "    //事件标题
             + "time text, "    //时间
             + "type text,"
+            + "priority integer," //优先级
             + "event text) ";   //事件内容
 
     private static final String CREATE_NOTEPAD = "create table Notepad ("
@@ -42,7 +43,7 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion){
-        //db.execSQL("drop table if exists DATE");
-        //db.execSQL("drop table if exists NOTEPAD");
+        db.execSQL("drop table if exists DATE");
+        db.execSQL("drop table if exists NOTEPAD");
     }
 }

@@ -1,6 +1,7 @@
 package com.zucc.ldh1135.secretary.DateManager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -31,6 +32,7 @@ public class Fragment_All extends Fragment {
     private Database dbHelper;
 
     String title,date,type;
+    int id;
     Date date_event;
 
     private List<Date> dateList = new ArrayList<>();
@@ -46,9 +48,10 @@ public class Fragment_All extends Fragment {
         Cursor cursor = db.query("Date",null,null,null,null,null,null);
         if(cursor.moveToFirst()){
             do{
+                id = cursor.getInt(cursor.getColumnIndex("id"));
                 title = cursor.getString(cursor.getColumnIndex("title"));
                 date = cursor.getString(cursor.getColumnIndex("time"));
-                date_event = new Date(title,date);
+                date_event = new Date(id,title,date);
                 dateList.add(date_event);
 
             }while(cursor.moveToNext());
@@ -70,8 +73,10 @@ public class Fragment_All extends Fragment {
         String date;
         String type;
         String event;
+        int id;
 
-        private Date(String title,String date){
+        private Date(int id,String title,String date){
+            this.id = id;
             this.title = title;
             this.date = date;
         }
@@ -98,6 +103,10 @@ public class Fragment_All extends Fragment {
         public String getEvent(){
             return event;
         }
+
+        public int getId(){
+            return id;
+        }
     }
 
     public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>{
@@ -111,6 +120,7 @@ public class Fragment_All extends Fragment {
             View dateView;
             TextView tv_title;
             TextView tv_date;
+            TextView tv_dif;
 
             public ViewHolder(View view){
                 super(view);
@@ -118,6 +128,7 @@ public class Fragment_All extends Fragment {
                 dateView = view;
                 tv_title = (TextView) view.findViewById(R.id.tv_title);
                 tv_date = (TextView) view.findViewById(R.id.tv_date);
+                tv_dif = (TextView) view.findViewById(R.id.tv_time_difference);
             }
         }
 
@@ -137,7 +148,9 @@ public class Fragment_All extends Fragment {
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
                     Date date = mDateList.get(position);
-                    Toast.makeText(v.getContext(),date.getTitle(),Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(),DetailDateActivity.class);
+                    intent.putExtra("id",String.valueOf(date.getId()));
+                    startActivity(intent);
                 }
             });
 
@@ -149,6 +162,7 @@ public class Fragment_All extends Fragment {
             Date date = mDateList.get(position);
             holder.tv_title.setText(date.getTitle());
             holder.tv_date.setText(date.getDate());
+            //holder.tv_date.setText(date.getId());
             //Glide.with(mContext).load(date.getImageId()).into(holder.dateImage);
         }
 

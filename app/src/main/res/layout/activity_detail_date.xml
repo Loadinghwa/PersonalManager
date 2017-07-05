@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.zucc.ldh1135.secretary.DateManager.DetailDateActivity">
+    tools:context="com.zucc.ldh1135.secretary.DateManager.AddDateActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -23,5 +23,208 @@
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_below="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_date_title"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:layout_marginStart="16dp"/>
+
+                <EditText
+                    android:id="@+id/add_date_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="16dp"
+                    android:textColorHint="#AAAAAA"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_date"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_date_date"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:layout_marginStart="16dp"/>
+
+                <TextView
+                    android:id="@+id/current_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:textSize="20sp"
+                    android:layout_marginEnd="16dp">
+
+                </TextView>
+
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_type"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_date_type"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:layout_marginStart="16dp"/>
+
+                <TextView
+                    android:id="@+id/add_date_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="16dp"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_priority"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_date_priority"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:layout_marginStart="16dp"/>
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="16dp">
+
+                    <RadioButton
+                        android:id="@+id/radiobtn_none"
+                        android:text="@string/radiobtn_none"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"/>
+
+                    <RadioButton
+                        android:id="@+id/radiobtn_first"
+                        android:text="@string/radiobtn_first"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"/>
+
+                    <RadioButton
+                        android:id="@+id/radiobtn_second"
+                        android:text="@string/radiobtn_second"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"/>
+
+                    <RadioButton
+                        android:id="@+id/radiobtn_third"
+                        android:text="@string/radiobtn_third"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"/>
+
+                </RadioGroup>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_date_note"
+                    android:textSize="20sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"/>
+
+                <EditText
+                    android:id="@+id/add_date_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="128dp"
+                    android:background="@drawable/bg_edittext_normal"
+                    android:padding="5dip"
+                    android:textColorHint="#AAAAAA"
+                    android:textSize="16sp"
+                    android:gravity="top"
+                    android:layout_marginTop="56dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:maxLines="7"/>
+
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_del"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_edittext_focused"
+                    android:text="@string/delete"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorWhite"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="16dp"
+                    />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+
+
+    </ScrollView>
 
 </RelativeLayout>

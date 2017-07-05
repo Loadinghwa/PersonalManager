@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         initView();
         MyAdapter adapter = new MyAdapter(getSupportFragmentManager(), mTitle, mFragment);
-        //viewPager.setOffscreenPageLimit(4);     //禁止切换页面时重新加载
+        viewPager.setOffscreenPageLimit(4);     //禁止切换页面时重新加载
 
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);
@@ -73,6 +73,10 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Intent intent;
                 switch(item.getItemId()){
+                    case R.id.nav_scan:
+                        intent = new Intent(MainActivity.this,ScanActivity.class);
+                        startActivity(intent);
+                        break;
                     case R.id.nav_note:
                         intent = new Intent(MainActivity.this,BalanceActivity.class);
                         startActivity(intent);
@@ -184,15 +188,8 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
-            case R.id.scan:
-                Intent intent = new Intent(MainActivity.this,ScanActivity.class);
-                startActivity(intent);
-                intent = getIntent();
-                overridePendingTransition(0, 0);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(intent);
+            case R.id.toolbar_search:
+
                 break;
             default:
         }

@@ -35,8 +35,9 @@
         <activity
             android:name=".DateManager.AddDateActivity"
             android:label="@string/activity_add_date" />
-        <activity android:name=".DateManager.DetailDateActivity" />
-        <activity android:name=".DateManager.EditDateActivity"></activity>
+        <activity
+            android:name=".DateManager.DetailDateActivity"
+            android:label="@string/toolbar_detail"/>
     </application>
 
 </manifest>

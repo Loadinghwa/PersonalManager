@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,11 +38,16 @@ public class AddDateActivity extends AppCompatActivity {
     private Database dbHelper;
     private Toolbar toolbar;
     private TextView textView_time;
-    private TextView textView_title;
-    private TextView textView_event;
+    private EditText editText_title;
+    private EditText editText_event;
     private TextView textView_type;
+    private RadioButton rbtn_none;
+    private RadioButton rbtn_first;
+    private RadioButton rbtn_second;
+    private RadioButton rbtn_third;
     private Calendar cal;
     private int year,month,day;
+    private int priority;
     Date date;
     SimpleDateFormat sDate;
     String dateNow;
@@ -60,15 +67,65 @@ public class AddDateActivity extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.icon_back);
         }
 
+        /*
         date = new Date();
         sDate = new SimpleDateFormat("yyyy-MM-dd");
         dateNow = sDate.format(date);
+        */
 
-        textView_title = (TextView) findViewById(R.id.add_date_title);
-        textView_event = (TextView) findViewById(R.id.add_date_event);
+        editText_title = (EditText) findViewById(R.id.add_date_title);
+        editText_event = (EditText) findViewById(R.id.add_date_event);
         textView_type = (TextView) findViewById(R.id.add_date_type);
         textView_time = (TextView) findViewById(R.id.current_date);
-        textView_time.setText(dateNow);
+
+        rbtn_none = (RadioButton) findViewById(R.id.radiobtn_none);
+        rbtn_first = (RadioButton) findViewById(R.id.radiobtn_first);
+        rbtn_second = (RadioButton) findViewById(R.id.radiobtn_second);
+        rbtn_third = (RadioButton) findViewById(R.id.radiobtn_third);
+
+        rbtn_none.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                priority = 0;
+                rbtn_none.setChecked(true);
+                rbtn_first.setChecked(false);
+                rbtn_second.setChecked(false);
+                rbtn_third.setChecked(false);
+            }
+        });
+
+        rbtn_first.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                priority = 1;
+                rbtn_none.setChecked(false);
+                rbtn_first.setChecked(true);
+                rbtn_second.setChecked(false);
+                rbtn_third.setChecked(false);
+            }
+        });
+
+        rbtn_second.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                priority = 2;
+                rbtn_none.setChecked(false);
+                rbtn_first.setChecked(false);
+                rbtn_second.setChecked(true);
+                rbtn_third.setChecked(false);
+            }
+        });
+
+        rbtn_third.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                priority = 3;
+                rbtn_none.setChecked(false);
+                rbtn_first.setChecked(false);
+                rbtn_second.setChecked(false);
+                rbtn_third.setChecked(true);
+            }
+        });
 
         getDate();
 
@@ -80,11 +137,31 @@ public class AddDateActivity extends AppCompatActivity {
                         OnDateSetListener listener = new OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker arg0, int year, int month, int day) {
-                                textView_time.setText(year + "-" + (++month) + "-" + day);      //将选择的日期显示到TextView中,因为之前获取month直接使用，所以不需要+1，这个地方需要显示，所以+1
+                                if((month+1)<10&&day<10)
+                                {
+                                    textView_time.setText(year + "-0" + (++month) + "-0" + day);
+                                }
+                                else if((month+1)<10&&day>=10)
+                                {
+                                    textView_time.setText(year + "-0" + (++month) + "-" + day);
+                                }
+                                else if((month+1)>=10&&day>=10)
+                                {
+                                    textView_time.setText(year + "-" + (++month) + "-" + day);
+                                }
+                                else if((month+1)>=10&&day<10)
+                                {
+                                    textView_time.setText(year + "-" + (++month) + "-" + day);      //将选择的日期显示到TextView中,因为之前获取month直接使用，所以不需要+1，这个地方需要显示，所以+1
+                                }
                             }
                         };
-                        DatePickerDialog dialog = new DatePickerDialog(AddDateActivity.this, 0, listener, year, month, day);//后边三个参数为显示dialog时默认的日期，月份从0开始，0-11对应1-12个月
+                        String str = textView_time.getText().toString();
+                        year = Integer.parseInt(str.substring(0,4));
+                        month = Integer.parseInt(str.substring(5,7));
+                        day = Integer.parseInt(str.substring(8));
+                        DatePickerDialog dialog = new DatePickerDialog(AddDateActivity.this, 0, listener, year, month-1, day);//后边三个参数为显示dialog时默认的日期，月份从0开始，0-11对应1-12个月
                         dialog.show();
+                        dialog.setCanceledOnTouchOutside(false);
                         break;
 
                     default:
@@ -135,10 +212,24 @@ public class AddDateActivity extends AppCompatActivity {
     private void getDate() {
         cal= Calendar.getInstance();
         year=cal.get(Calendar.YEAR);       //获取年月日时分秒
-        Log.i("wxy","year"+year);
         month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
         day=cal.get(Calendar.DAY_OF_MONTH);
-        //textView_time.setText(year+"-"+month+"-"+day);
+        if((month+1)<10&&day<10)
+        {
+            textView_time.setText(String.valueOf(year)+"-0"+String.valueOf(month+1)+"-0"+String.valueOf(day));
+        }
+        else if((month+1)<10&&day>=10)
+        {
+            textView_time.setText(String.valueOf(year)+"-0"+String.valueOf(month+1)+"-"+String.valueOf(day));
+        }
+        else if((month+1)>=10&&day<10)
+        {
+            textView_time.setText(String.valueOf(year)+"-"+String.valueOf(month+1)+"-0"+String.valueOf(day));
+        }
+        else if((month+1)>=10&&day>=10)
+        {
+            textView_time.setText(String.valueOf(year)+"-"+String.valueOf(month+1)+"-"+String.valueOf(day));
+        }
     }
 
     @Override
@@ -152,17 +243,20 @@ public class AddDateActivity extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.save:
                 ContentValues values = new ContentValues();
-                String event = textView_event.getText().toString();
-                String title = textView_title.getText().toString();
+                String event = editText_event.getText().toString();
+                String title = editText_title.getText().toString();
                 String time = textView_time.getText().toString();
                 String type = textView_type.getText().toString();
                 values.put("title",title);
                 values.put("time",time);
                 values.put("event",event);
                 values.put("type",type);
+                values.put("priority",priority);
                 db.insert("Date",null,values);
                 Toast.makeText(this,"添加成功",Toast.LENGTH_SHORT).show();
                 finish();
+                Intent intent = new Intent(AddDateActivity.this,MainActivity.class);
+                startActivity(intent);
                 break;
             case android.R.id.home:
                 finish();
