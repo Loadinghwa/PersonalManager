@@ -19,9 +19,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.cocosw.bottomsheet.BottomSheet;
+import com.zucc.ldh1135.secretary.AlarmManager.AlarmActivity;
 import com.zucc.ldh1135.secretary.DateManager.AddDateActivity;
 import com.zucc.ldh1135.secretary.DateManager.Fragment_Affairs;
 import com.zucc.ldh1135.secretary.DateManager.Fragment_All;

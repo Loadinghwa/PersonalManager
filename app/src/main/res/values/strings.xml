@@ -34,4 +34,5 @@
     <string name="radiobtn_third">!!!</string>
     <string name="nav_scan">扫一扫</string>
     <string name="toolbar_search">搜索</string>
+    <string name="toolbar_add">添加</string>
 </resources>

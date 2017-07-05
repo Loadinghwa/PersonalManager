@@ -1,17 +1,23 @@
-package com.zucc.ldh1135.secretary;
+package com.zucc.ldh1135.secretary.AlarmManager;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
-public class BalanceActivity extends AppCompatActivity {
+import com.zucc.ldh1135.secretary.R;
+
+public class AddAlarmActivity extends AppCompatActivity {
+
     private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_balance);
+        setContentView(R.layout.activity_add_alarm);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -22,12 +28,19 @@ public class BalanceActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.toolbar_add_alarm,menu);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.save:
 
                 break;
         }

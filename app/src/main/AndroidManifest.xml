@@ -10,6 +10,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/secretary"
+        android:label="@string/app_name"
         android:roundIcon="@drawable/secretary"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -23,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AlarmActivity"
+            android:name=".AlarmManager.AlarmActivity"
             android:label="@string/activity_alarm" />
         <activity
             android:name=".BalanceActivity"
@@ -37,7 +38,9 @@
             android:label="@string/activity_add_date" />
         <activity
             android:name=".DateManager.DetailDateActivity"
-            android:label="@string/toolbar_detail"/>
+            android:label="@string/toolbar_detail" />
+        <activity android:name=".AlarmManager.AddAlarmActivity" />
+        <activity android:name=".AlarmManager.EditAlarmActivity"></activity>
     </application>
 
 </manifest>

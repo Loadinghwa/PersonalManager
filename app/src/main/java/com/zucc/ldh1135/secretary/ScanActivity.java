@@ -117,6 +117,7 @@ public class ScanActivity extends AppCompatActivity implements QRCodeView.Delega
                 mQRCodeView.stopCamera();
                 mQRCodeView.onDestroy();
                 finish();
+
                 break;
         }
     }
