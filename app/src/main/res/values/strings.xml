@@ -35,4 +35,6 @@
     <string name="nav_scan">扫一扫</string>
     <string name="toolbar_search">搜索</string>
     <string name="toolbar_add">添加</string>
+    <string name="add_date_notice">提醒</string>
+    <string name="add_date_alarm">闹钟</string>
 </resources>

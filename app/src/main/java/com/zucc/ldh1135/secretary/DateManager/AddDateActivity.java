@@ -15,9 +15,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +37,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.R.attr.animation;
+import static android.R.attr.inflatedId;
+
 
 public class AddDateActivity extends AppCompatActivity {
 
@@ -41,12 +49,16 @@ public class AddDateActivity extends AppCompatActivity {
     private EditText editText_title;
     private EditText editText_event;
     private TextView textView_type;
+    private TextView textView_notice;
+    private TextView textView_alarm;
+    private Switch switch_notice;
+    private FrameLayout frame_alarm;
     private RadioButton rbtn_none;
     private RadioButton rbtn_first;
     private RadioButton rbtn_second;
     private RadioButton rbtn_third;
     private Calendar cal;
-    private int year,month,day;
+    private int year,month,day,hour,minute,week;
     private int priority;
     Date date;
     SimpleDateFormat sDate;
@@ -73,6 +85,7 @@ public class AddDateActivity extends AppCompatActivity {
         dateNow = sDate.format(date);
         */
 
+
         editText_title = (EditText) findViewById(R.id.add_date_title);
         editText_event = (EditText) findViewById(R.id.add_date_event);
         textView_type = (TextView) findViewById(R.id.add_date_type);
@@ -82,6 +95,15 @@ public class AddDateActivity extends AppCompatActivity {
         rbtn_first = (RadioButton) findViewById(R.id.radiobtn_first);
         rbtn_second = (RadioButton) findViewById(R.id.radiobtn_second);
         rbtn_third = (RadioButton) findViewById(R.id.radiobtn_third);
+
+        switch_notice = (Switch) findViewById(R.id.switch_notice);
+
+        textView_notice = (TextView) findViewById(R.id.tv_notice);
+        textView_alarm = (TextView) findViewById(R.id.tv_alarm);
+
+        frame_alarm = (FrameLayout) findViewById(R.id.frame_alarm);
+
+        getDate();
 
         rbtn_none.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +149,46 @@ public class AddDateActivity extends AppCompatActivity {
             }
         });
 
-        getDate();
+        switch_notice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(switch_notice.isChecked())
+                {
+                    Animation inFromLeft = new TranslateAnimation(
+                            Animation.RELATIVE_TO_PARENT, -1.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f);
+
+                    Animation inFromRight = new TranslateAnimation(
+                            Animation.RELATIVE_TO_PARENT, 0.0f,
+                            Animation.RELATIVE_TO_PARENT, -1.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f);
+
+                    inFromLeft.setDuration(500);
+                    inFromLeft.setInterpolator(new AccelerateInterpolator());
+                    inFromRight.setDuration(500);
+                    inFromRight.setInterpolator(new AccelerateInterpolator());
+                    textView_notice.setAnimation(inFromLeft);
+                    textView_alarm.setAnimation(inFromLeft);
+                    inFromLeft.startNow();
+                    //inFromRight.startNow();
+                    frame_alarm.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    frame_alarm.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        textView_alarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         textView_time.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,25 +271,62 @@ public class AddDateActivity extends AppCompatActivity {
 
     //获取当前日期
     private void getDate() {
-        cal= Calendar.getInstance();
-        year=cal.get(Calendar.YEAR);       //获取年月日时分秒
-        month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
-        day=cal.get(Calendar.DAY_OF_MONTH);
+        cal = Calendar.getInstance();
+        year = cal.get(Calendar.YEAR);       //获取年月日时分秒
+        month = cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+        minute = cal.get(Calendar.MINUTE);
+        week = cal.get(Calendar.DAY_OF_WEEK);
+        String mWeek;
+        if(week==1)
+        {
+            mWeek = "天";
+        }
+        else if(week==2)
+        {
+            mWeek = "一";
+        }
+        else if(week==3)
+        {
+            mWeek = "二";
+        }
+        else if(week==4)
+        {
+            mWeek = "三";
+        }
+        else if(week==5)
+        {
+            mWeek = "四";
+        }
+        else if(week==6)
+        {
+            mWeek = "五";
+        }
+        else
+        {
+            mWeek = "六";
+        }
         if((month+1)<10&&day<10)
         {
             textView_time.setText(String.valueOf(year)+"-0"+String.valueOf(month+1)+"-0"+String.valueOf(day));
+            textView_alarm.setText(String.valueOf(year) + "-0" + String.valueOf(++month) + "-0" + String.valueOf(day) + "星期" + mWeek + String.valueOf(hour) + ":" + String.valueOf(minute));
         }
         else if((month+1)<10&&day>=10)
         {
             textView_time.setText(String.valueOf(year)+"-0"+String.valueOf(month+1)+"-"+String.valueOf(day));
+            textView_alarm.setText(String.valueOf(year) + "-0" + String.valueOf(++month) + "-" + String.valueOf(day) + "星期" + mWeek + String.valueOf(hour) + ":" + String.valueOf(minute));
         }
         else if((month+1)>=10&&day<10)
         {
             textView_time.setText(String.valueOf(year)+"-"+String.valueOf(month+1)+"-0"+String.valueOf(day));
+            textView_alarm.setText(String.valueOf(year) + "-" + String.valueOf(++month) + "-0" + String.valueOf(day) + "星期" + mWeek + String.valueOf(hour) + ":" + String.valueOf(minute));
+
         }
         else if((month+1)>=10&&day>=10)
         {
             textView_time.setText(String.valueOf(year)+"-"+String.valueOf(month+1)+"-"+String.valueOf(day));
+            textView_alarm.setText(String.valueOf(year) + "-" + String.valueOf(++month) + "-" + String.valueOf(day) + "星期" + mWeek + String.valueOf(hour) + ":" + String.valueOf(minute));
         }
     }
 

@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,9 +24,9 @@ import com.zucc.ldh1135.secretary.Database;
 import com.zucc.ldh1135.secretary.MainActivity;
 import com.zucc.ldh1135.secretary.R;
 
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
+
 
 public class DetailDateActivity extends AppCompatActivity {
 
@@ -239,13 +238,29 @@ public class DetailDateActivity extends AppCompatActivity {
         findViewById(R.id.btn_del).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.delete("Date","id = ?",new String[]{intent_data});
+                AlertDialog.Builder builder = new AlertDialog.Builder(DetailDateActivity.this);
+                builder.setMessage("确认删除吗？");
+                builder.setTitle("提示");
+                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        db.delete("Date","id = ?",new String[]{intent_data});
+                        dialog.dismiss();
+                        Toast.makeText(DetailDateActivity.this,"删除成功",Toast.LENGTH_SHORT).show();
+                        finish();
+                        Intent intent = new Intent(DetailDateActivity.this,MainActivity.class);
+                        startActivity(intent);
+                    }
+                });
 
-                Toast.makeText(DetailDateActivity.this,"删除成功",Toast.LENGTH_SHORT).show();
-                finish();
-                Intent intent = new Intent(DetailDateActivity.this,MainActivity.class);
-                startActivity(intent);
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
             }
         });
 

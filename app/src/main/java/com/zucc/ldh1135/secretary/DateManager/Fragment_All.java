@@ -15,12 +15,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+
 import com.zucc.ldh1135.secretary.Database;
 import com.zucc.ldh1135.secretary.R;
 
+
 import java.util.ArrayList;
+import java.util.Calendar;
+
 import java.util.List;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Loading~ on 2017/7/4.
@@ -33,14 +41,19 @@ public class Fragment_All extends Fragment {
 
     String title,date,type;
     int id;
-    Date date_event;
+    long days_dif;
+    DateNote date_event;
+    private Calendar cal;
+    private int year,month,day;
 
-    private List<Date> dateList = new ArrayList<>();
+    private List<DateNote> dateList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_all,container,false);
+
+        getDate();
 
         dateList.clear();
         dbHelper = new Database(getActivity(),"Database.db",null,database_version);
@@ -48,10 +61,26 @@ public class Fragment_All extends Fragment {
         Cursor cursor = db.query("Date",null,null,null,null,null,null);
         if(cursor.moveToFirst()){
             do{
+
                 id = cursor.getInt(cursor.getColumnIndex("id"));
                 title = cursor.getString(cursor.getColumnIndex("title"));
                 date = cursor.getString(cursor.getColumnIndex("time"));
-                date_event = new Date(id,title,date);
+
+                try
+                {
+                    SimpleDateFormat formart= new SimpleDateFormat("yyyy-MM-dd");
+                    //记录时间
+                    java.util.Date date_note = formart.parse(date);
+                    //当前时间
+                    java.util.Date date_now = formart.parse(String.valueOf(year)+"-"+String.valueOf(month)+"-"+String.valueOf(day));
+                    days_dif =  (date_note.getTime() - date_now.getTime()) / (1000 * 60 * 60 * 24);
+                }
+                catch (Exception e)
+                {
+
+                }
+
+                date_event = new DateNote(id,title,date,days_dif);
                 dateList.add(date_event);
 
             }while(cursor.moveToNext());
@@ -65,27 +94,29 @@ public class Fragment_All extends Fragment {
         DateAdapter dateAdapter = new DateAdapter(dateList);
         recyclerView.setAdapter(dateAdapter);
 
+
         return view;
     }
 
-    private class Date{
+    //获取当前日期
+    private void getDate() {
+        cal= Calendar.getInstance();
+        year=cal.get(Calendar.YEAR);       //获取年月日时分秒
+        month=cal.get(Calendar.MONTH)+1;   //获取到的月份是从0开始计数
+        day=cal.get(Calendar.DAY_OF_MONTH);
+    }
+
+    private class DateNote{
         String title;
         String date;
-        String type;
-        String event;
         int id;
+        long dif;
 
-        private Date(int id,String title,String date){
+        private DateNote(int id,String title,String date,long dif){
             this.id = id;
             this.title = title;
             this.date = date;
-        }
-
-        private Date(String title,String date,String type,String event){
-            this.title = title;
-            this.date = date;
-            this.type = type;
-            this.event = event;
+            this.dif = dif;
         }
 
         public String getTitle(){
@@ -96,16 +127,12 @@ public class Fragment_All extends Fragment {
             return date;
         }
 
-        public String getType(){
-            return type;
-        }
-
-        public String getEvent(){
-            return event;
-        }
-
         public int getId(){
             return id;
+        }
+
+        public long getDif(){
+            return dif;
         }
     }
 
@@ -113,7 +140,7 @@ public class Fragment_All extends Fragment {
 
         private Context mContext;
 
-        private List<Date> mDateList;
+        private List<DateNote> mDateList;
 
         public class ViewHolder extends RecyclerView.ViewHolder{
             CardView cardView;
@@ -132,7 +159,7 @@ public class Fragment_All extends Fragment {
             }
         }
 
-        public DateAdapter(List<Date> dateList){
+        public DateAdapter(List<DateNote> dateList){
             mDateList = dateList;
         }
 
@@ -141,13 +168,13 @@ public class Fragment_All extends Fragment {
             if(mContext == null){
                 mContext = parent.getContext();
             }
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycleview_all,parent,false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_all,parent,false);
             final ViewHolder holder = new ViewHolder(view);
             holder.dateView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    Date date = mDateList.get(position);
+                    DateNote date = mDateList.get(position);
                     Intent intent = new Intent(getActivity(),DetailDateActivity.class);
                     intent.putExtra("id",String.valueOf(date.getId()));
                     startActivity(intent);
@@ -159,9 +186,21 @@ public class Fragment_All extends Fragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder,int position){
-            Date date = mDateList.get(position);
+            DateNote date = mDateList.get(position);
             holder.tv_title.setText(date.getTitle());
             holder.tv_date.setText(date.getDate());
+            if(date.getDif()<0)
+            {
+                holder.tv_dif.setText("过去"+ (-date.getDif()) +"天");
+            }
+            else if(date.getDif()>0)
+            {
+                holder.tv_dif.setText("还有"+ date.getDif() +"天");
+            }
+            else
+            {
+                holder.tv_dif.setText("就是今天");
+            }
             //holder.tv_date.setText(date.getId());
             //Glide.with(mContext).load(date.getImageId()).into(holder.dateImage);
         }

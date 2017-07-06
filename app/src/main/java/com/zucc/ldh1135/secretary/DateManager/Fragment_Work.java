@@ -33,9 +33,9 @@ public class Fragment_Work extends Fragment {
     private Database dbHelper;
 
     String title,date,type;
-    Date date_event;
+    DateNote date_event;
 
-    private List<Date> dateList = new ArrayList<>();
+    private List<DateNote> dateList = new ArrayList<>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_work,container,false);
@@ -51,7 +51,7 @@ public class Fragment_Work extends Fragment {
                 type = cursor.getString(cursor.getColumnIndex("type"));
                 if(type.equals("工作"))
                 {
-                    date_event = new Date(title,date);
+                    date_event = new DateNote(title,date);
                     dateList.add(date_event);
                 }
             }while(cursor.moveToNext());
@@ -68,18 +68,18 @@ public class Fragment_Work extends Fragment {
         return view;
     }
 
-    private class Date{
+    private class DateNote{
         String title;
         String date;
         String type;
         String event;
 
-        private Date(String title,String date){
+        private DateNote(String title,String date){
             this.title = title;
             this.date = date;
         }
 
-        private Date(String title,String date,String type,String event){
+        private DateNote(String title,String date,String type,String event){
             this.title = title;
             this.date = date;
             this.type = type;
@@ -107,7 +107,7 @@ public class Fragment_Work extends Fragment {
 
         private Context mContext;
 
-        private List<Date> mDateList;
+        private List<DateNote> mDateList;
 
         public class ViewHolder extends RecyclerView.ViewHolder{
             CardView cardView;
@@ -124,7 +124,7 @@ public class Fragment_Work extends Fragment {
             }
         }
 
-        public DateAdapter(List<Date> dateList){
+        public DateAdapter(List<DateNote> dateList){
             mDateList = dateList;
         }
 
@@ -133,13 +133,13 @@ public class Fragment_Work extends Fragment {
             if(mContext == null){
                 mContext = parent.getContext();
             }
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycleview_all,parent,false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_work,parent,false);
             final ViewHolder holder = new ViewHolder(view);
             holder.dateView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-                    Date date = mDateList.get(position);
+                    DateNote date = mDateList.get(position);
                     Toast.makeText(v.getContext(),date.getTitle(),Toast.LENGTH_SHORT).show();
                 }
             });
@@ -149,7 +149,7 @@ public class Fragment_Work extends Fragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder,int position){
-            Date date = mDateList.get(position);
+            DateNote date = mDateList.get(position);
             holder.tv_title.setText(date.getTitle());
             holder.tv_date.setText(date.getDate());
             //Glide.with(mContext).load(date.getImageId()).into(holder.dateImage);
