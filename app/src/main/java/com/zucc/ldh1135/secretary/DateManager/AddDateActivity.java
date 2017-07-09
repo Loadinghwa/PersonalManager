@@ -1,16 +1,20 @@
 package com.zucc.ldh1135.secretary.DateManager;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,18 +31,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.zucc.ldh1135.secretary.Database;
+import com.zucc.ldh1135.secretary.AlarmClockManager.AlarmActivity;
+import com.zucc.ldh1135.secretary.DataBase.Database;
 import com.zucc.ldh1135.secretary.MainActivity;
 import com.zucc.ldh1135.secretary.R;
-
 
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import static android.R.attr.animation;
-import static android.R.attr.inflatedId;
 
 
 public class AddDateActivity extends AppCompatActivity {
@@ -60,11 +61,21 @@ public class AddDateActivity extends AppCompatActivity {
     private Calendar cal;
     private int year,month,day,hour,minute,week;
     private int priority;
-    Date date;
-    SimpleDateFormat sDate;
-    String dateNow;
+
     SQLiteDatabase db;
     private int database_version = 1;
+    String str;
+    AlarmManager am;
+    PendingIntent pi;
+    int rings;
+    int tp_hour;
+    int tp_minute ;
+    Intent intent;
+    long startTime;
+    Date date;
+    int shake;
+
+    AlarmManager aManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +90,6 @@ public class AddDateActivity extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.icon_back);
         }
 
-        /*
-        date = new Date();
-        sDate = new SimpleDateFormat("yyyy-MM-dd");
-        dateNow = sDate.format(date);
-        */
 
 
         editText_title = (EditText) findViewById(R.id.add_date_title);
@@ -104,6 +110,7 @@ public class AddDateActivity extends AppCompatActivity {
         frame_alarm = (FrameLayout) findViewById(R.id.frame_alarm);
 
         getDate();
+
 
         rbtn_none.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,10 +190,18 @@ public class AddDateActivity extends AppCompatActivity {
             }
         });
 
-        textView_alarm.setOnClickListener(new View.OnClickListener() {
+        frame_alarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(AddDateActivity.this,AlarmActivity.class);
+                intent.putExtra("year",textView_time.getText().toString().substring(0,4));
+                intent.putExtra("month",textView_time.getText().toString().substring(5,7));
+                intent.putExtra("day",textView_time.getText().toString().substring(8));
+                intent.putExtra("hour",textView_alarm.getText().toString().substring(0,2));
+                intent.putExtra("minute",textView_alarm.getText().toString().substring(3));
+                intent.putExtra("shake",shake);
+                intent.putExtra("rings",rings);
+                startActivityForResult(intent,1);
             }
         });
 
@@ -269,6 +284,15 @@ public class AddDateActivity extends AppCompatActivity {
         db = dbHelper.getWritableDatabase();
     }
 
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    // create
+
     //获取当前日期
     private void getDate() {
         cal = Calendar.getInstance();
@@ -307,26 +331,38 @@ public class AddDateActivity extends AppCompatActivity {
         {
             mWeek = "六";
         }
+        if(minute<10&&hour<10)
+        {
+            textView_alarm.setText("0" + String.valueOf(hour) + ":0" + String.valueOf(minute));
+        }
+        else if(minute<10&&hour>=10)
+        {
+            textView_alarm.setText(String.valueOf(hour) + ":0" + String.valueOf(minute));
+        }
+        else if(minute>=10&&hour<10)
+        {
+            textView_alarm.setText("0" + String.valueOf(hour) + ":" + String.valueOf(minute));
+        }
+        else
+        {
+            textView_alarm.setText(String.valueOf(hour) + ":" + String.valueOf(minute));
+        }
+
         if((month+1)<10&&day<10)
         {
             textView_time.setText(String.valueOf(year)+"-0"+String.valueOf(month+1)+"-0"+String.valueOf(day));
-            textView_alarm.setText(String.valueOf(year) + "-0" + String.valueOf(++month) + "-0" + String.valueOf(day) + "星期" + mWeek + String.valueOf(hour) + ":" + String.valueOf(minute));
         }
         else if((month+1)<10&&day>=10)
         {
             textView_time.setText(String.valueOf(year)+"-0"+String.valueOf(month+1)+"-"+String.valueOf(day));
-            textView_alarm.setText(String.valueOf(year) + "-0" + String.valueOf(++month) + "-" + String.valueOf(day) + "星期" + mWeek + String.valueOf(hour) + ":" + String.valueOf(minute));
         }
         else if((month+1)>=10&&day<10)
         {
             textView_time.setText(String.valueOf(year)+"-"+String.valueOf(month+1)+"-0"+String.valueOf(day));
-            textView_alarm.setText(String.valueOf(year) + "-" + String.valueOf(++month) + "-0" + String.valueOf(day) + "星期" + mWeek + String.valueOf(hour) + ":" + String.valueOf(minute));
-
         }
         else if((month+1)>=10&&day>=10)
         {
             textView_time.setText(String.valueOf(year)+"-"+String.valueOf(month+1)+"-"+String.valueOf(day));
-            textView_alarm.setText(String.valueOf(year) + "-" + String.valueOf(++month) + "-" + String.valueOf(day) + "星期" + mWeek + String.valueOf(hour) + ":" + String.valueOf(minute));
         }
     }
 
@@ -340,18 +376,111 @@ public class AddDateActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.save:
+                if(TextUtils.isEmpty(editText_title.getText())){
+                    new AlertDialog.Builder(this).setTitle("提示").setMessage("请输入标题！")
+                            .setPositiveButton("好的",null).show().setCanceledOnTouchOutside(false);
+                    break;
+                }
+
                 ContentValues values = new ContentValues();
                 String event = editText_event.getText().toString();
                 String title = editText_title.getText().toString();
                 String time = textView_time.getText().toString();
                 String type = textView_type.getText().toString();
+
+                //闹钟部分
+                tp_hour = Integer.parseInt(textView_alarm.getText().toString().substring(0,2));
+                tp_minute = Integer.parseInt(textView_alarm.getText().toString().substring(3));
+
+                if((month+1)<10&&day<10)
+                {
+                    str = year + "-0" + (++month) + "-0" + day + " " + String.valueOf(tp_hour) + ":" + String.valueOf(tp_minute);
+                }
+                else if((month+1)<10&&day>=10)
+                {
+                    str = year + "-0" + (++month) + "-" + day + " " + String.valueOf(tp_hour) + ":" + String.valueOf(tp_minute);
+                }
+                else if((month+1)>=10&&day<10)
+                {
+                    str = year + "-" + (++month) + "-0" + day + " " + String.valueOf(tp_hour) + ":" + String.valueOf(tp_minute);
+                }
+                else if((month+1)>=10&&day>=10)
+                {
+                    str = year + "-" + (++month) + "-" + day + " " + String.valueOf(tp_hour) + ":" + String.valueOf(tp_minute);
+                }
+
+                //Toast.makeText(this,str,Toast.LENGTH_SHORT).show();
+
+                try
+                {
+                    date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(str);
+                    startTime = date.getTime();
+                    //Calendar c = Calendar.getInstance();
+                    //c.set(Calendar.HOUR, tp_hour);
+                    //c.set(Calendar.MINUTE, tp_minute);
+                    //startTime = c.getTimeInMillis(); //long
+                }
+                catch (Exception e)
+                {
+
+                }
+
+                dbHelper = new Database(AddDateActivity.this,"Database.db",null,database_version);
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                Cursor cursor = db.query("Date",null,null,null,null,null,null);
+
+                int id = 0;
+
+                if(cursor.moveToFirst()){
+                    do{
+                        id = cursor.getInt(cursor.getColumnIndex("id"));
+
+                    }while(cursor.moveToNext());
+                    id++;
+                }
+
+
+                cursor.close();
+
+                /*
+                //判断是否开启提醒服务
+                if(switch_notice.isChecked())
+                {
+                    //获取系统闹钟服务
+                    intent = new Intent("ALARM_CLOCK");
+                    intent.putExtra("title",title);
+                    intent.putExtra("time",time);
+                    intent.putExtra("rings",rings);
+                    intent.putExtra("shake",shake);
+                    intent.putExtra("id",String.valueOf(id));
+                    //sendBroadcast(intent);
+                    pi = PendingIntent.getBroadcast(this,0,intent,0);
+                    am = (AlarmManager) getSystemService(ALARM_SERVICE);
+                    am.set(AlarmManager.RTC_WAKEUP,startTime,pi);
+                }
+                */
+
                 values.put("title",title);
                 values.put("time",time);
+                values.put("alarm_time",textView_alarm.getText().toString());
                 values.put("event",event);
                 values.put("type",type);
+                values.put("rings",rings);
                 values.put("priority",priority);
+                values.put("shake",shake);
+                if(switch_notice.isChecked())
+                {
+                    values.put("flag",1);
+                }
+                else
+                {
+                    values.put("flag",0);
+                }
+
                 db.insert("Date",null,values);
-                Toast.makeText(this,"添加成功",Toast.LENGTH_SHORT).show();
+
+
+                //Toast.makeText(this,"添加成功",Toast.LENGTH_SHORT).show();
                 finish();
                 Intent intent = new Intent(AddDateActivity.this,MainActivity.class);
                 startActivity(intent);
@@ -361,5 +490,36 @@ public class AddDateActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,int resultCode,Intent data){
+        switch(requestCode){
+            case 1:
+                if(resultCode==RESULT_OK)
+                {
+                    tp_hour = Integer.parseInt(data.getStringExtra("hour"));
+                    tp_minute = Integer.parseInt(data.getStringExtra("minute"));
+                    rings = data.getIntExtra("rings",0);
+                    shake = data.getIntExtra("shake",0);
+                    if(tp_hour<10&&tp_minute<10)
+                    {
+                        textView_alarm.setText("0" + tp_hour + ":0" + tp_minute);
+                    }
+                    else if(tp_hour<10&&tp_minute>=10)
+                    {
+                        textView_alarm.setText("0" + tp_hour + ":" + tp_minute);
+                    }
+                    else if(tp_hour>=10&&tp_minute<10)
+                    {
+                        textView_alarm.setText(tp_hour + ":0" + tp_minute);
+                    }
+                    else
+                    {
+                        textView_alarm.setText(tp_hour + ":" + tp_minute);
+                    }
+                }
+                break;
+        }
     }
 }

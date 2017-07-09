@@ -47,7 +47,8 @@
                     android:text="@string/add_date_title"
                     android:layout_gravity="center_vertical"
                     android:textSize="20sp"
-                    android:layout_marginStart="16dp"/>
+                    android:layout_marginStart="16dp"
+                    android:textColor="@color/colorBlack"/>
 
                 <EditText
                     android:id="@+id/add_date_title"
@@ -71,7 +72,8 @@
                     android:text="@string/add_date_date"
                     android:layout_gravity="center_vertical"
                     android:textSize="20sp"
-                    android:layout_marginStart="16dp"/>
+                    android:layout_marginStart="16dp"
+                    android:textColor="@color/colorBlack"/>
 
                 <TextView
                     android:id="@+id/current_date"
@@ -98,12 +100,67 @@
                     android:text="@string/add_date_type"
                     android:layout_gravity="center_vertical"
                     android:textSize="20sp"
-                    android:layout_marginStart="16dp"/>
+                    android:layout_marginStart="16dp"
+                    android:textColor="@color/colorBlack"/>
 
                 <TextView
                     android:id="@+id/add_date_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="16dp"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_notice"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_date_notice"
+                    android:textColor="@color/colorBlack"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:layout_marginStart="16dp"/>
+
+                <Switch
+                    android:id="@+id/switch_notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="16dp"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_alarm"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/border"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tv_notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_date_alarm"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_marginStart="16dp" />
+
+                <TextView
+                    android:id="@+id/tv_alarm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="2017-07-07"
                     android:textSize="20sp"
                     android:layout_gravity="center_vertical|end"
                     android:layout_marginEnd="16dp"/>
@@ -120,6 +177,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/add_date_priority"
+                    android:textColor="@color/colorBlack"
                     android:layout_gravity="center_vertical"
                     android:textSize="20sp"
                     android:layout_marginStart="16dp"/>
@@ -180,6 +238,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/add_date_note"
+                    android:textColor="@color/colorBlack"
                     android:textSize="20sp"
                     android:layout_marginTop="16dp"
                     android:layout_marginStart="16dp"/>
@@ -210,20 +269,18 @@
                     android:id="@+id/btn_del"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
                     android:background="@drawable/bg_edittext_focused"
                     android:text="@string/delete"
-                    android:textSize="20sp"
                     android:textColor="@color/colorWhite"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="16dp"
-                    />
+                    android:textSize="20sp" />
 
             </FrameLayout>
 
         </LinearLayout>
-
-
 
     </ScrollView>
 

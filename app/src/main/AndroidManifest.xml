@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -14,6 +19,25 @@
         android:roundIcon="@drawable/secretary"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <receiver
+            android:name=".AlarmClockManager.AlarmReceiver"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="ALARM_CLOCK" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".AlarmClockManager.BootCompleteReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="BOOT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -24,23 +48,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AlarmManager.AlarmActivity"
+            android:name=".AlarmClockManager.AlarmActivity"
             android:label="@string/activity_alarm" />
         <activity
-            android:name=".BalanceActivity"
-            android:label="@string/activity_balance" />
+            android:name=".BalanceManager.BalanceActivity"
+            android:label="@string/activity_balance"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/activity_settings" />
         <activity android:name=".ScanActivity" />
         <activity
             android:name=".DateManager.AddDateActivity"
-            android:label="@string/activity_add_date" />
+            android:label="@string/activity_add_date"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".DateManager.DetailDateActivity"
             android:label="@string/toolbar_detail" />
-        <activity android:name=".AlarmManager.AddAlarmActivity" />
-        <activity android:name=".AlarmManager.EditAlarmActivity"></activity>
+        <activity
+            android:name=".BalanceManager.AddBalanceActivity"
+            android:label="@string/activity_balance" />
+        <activity
+            android:name=".AlarmClockManager.AlarmClockActivity"
+            android:label="@string/activity_alarm" />
+        <activity
+            android:name=".DateManager.SearchDateActivity"
+            android:label="@string/toolbar_search" />
     </application>
 
 </manifest>

@@ -37,4 +37,13 @@
     <string name="toolbar_add">添加</string>
     <string name="add_date_notice">提醒</string>
     <string name="add_date_alarm">闹钟</string>
+    <string name="alarm_rings">铃声</string>
+    <string name="alarm_shake">振动</string>
+    <string name="alarm_label">标签</string>
+    <string name="alarm_repeat">重复</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="string_null">无</string>
+    <string name="rings_default">千军万马</string>
+    <string name="date_search">请输入搜索的日程标题</string>
 </resources>

@@ -9,4 +9,7 @@
     <color name="colorGrayLight">#E0E0E0</color>
     <color name="colorBlack">#000</color>
     <color name="colorRed">#FF0000</color>
+    <color name="title_transparent_black">#22000000</color>
+    <color name="light_black">#141414</color>
+    <color name="line_and_outline_grey">#d9d9d9</color>
 </resources>

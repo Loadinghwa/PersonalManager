@@ -2,53 +2,74 @@ package com.zucc.ldh1135.secretary;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.cocosw.bottomsheet.BottomSheet;
-import com.zucc.ldh1135.secretary.AlarmManager.AlarmActivity;
+import com.melnykov.fab.FloatingActionButton;
+import com.zucc.ldh1135.secretary.AlarmClockManager.AlarmClockActivity;
+import com.zucc.ldh1135.secretary.BalanceManager.BalanceActivity;
+import com.zucc.ldh1135.secretary.DataBase.Database;
 import com.zucc.ldh1135.secretary.DateManager.AddDateActivity;
 import com.zucc.ldh1135.secretary.DateManager.Fragment_Affairs;
 import com.zucc.ldh1135.secretary.DateManager.Fragment_All;
 import com.zucc.ldh1135.secretary.DateManager.Fragment_Plan;
 import com.zucc.ldh1135.secretary.DateManager.Fragment_Work;
+import com.zucc.ldh1135.secretary.DateManager.SearchDateActivity;
+import com.zucc.ldh1135.secretary.Util.ExitUtil;
+import com.zucc.ldh1135.secretary.Util.NoScrollViewPager;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
+
     private DrawerLayout mDrawerLayout;
     private Toolbar toolbar;
     private NavigationView navView;
     private Database database;
     private FloatingActionButton fab_add;
     private int database_version = 1;
+    private long exitTime = 0;
 
     private TabLayout tabs;
-    private ViewPager viewPager;
+    private NoScrollViewPager viewPager;
     private List<String> mTitle = new ArrayList<>();
     private List<Fragment> mFragment = new ArrayList<>();
+
+    AlertDialog.Builder builder;
+    Intent intent;
+    private Database dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ExitUtil.getInstance().addActivity(this);
 
         initView();
         MyAdapter adapter = new MyAdapter(getSupportFragmentManager(), mTitle, mFragment);
@@ -71,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Intent intent;
                 switch(item.getItemId()){
                     case R.id.nav_scan:
                         intent = new Intent(MainActivity.this,ScanActivity.class);
@@ -79,10 +99,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_note:
                         intent = new Intent(MainActivity.this,BalanceActivity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.nav_alarm:
-                        intent = new Intent(MainActivity.this,AlarmActivity.class);
                         startActivity(intent);
                         break;
                     case R.id.nav_settings:
@@ -98,15 +114,18 @@ public class MainActivity extends AppCompatActivity {
         database = new Database(this,"Database.db",null,database_version);
         database.getWritableDatabase();
 
-        fab_add = (FloatingActionButton) findViewById(R.id.fab);
-        fab_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddDateActivity.class);
-                startActivity(intent);
-            }
-        });
+
+
     }
+
+    //
+    //
+    //
+    //
+    //
+    // create
+
+
 
     //更改背景
     public void changeBackground(View v){
@@ -126,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
 
         tabs = (TabLayout) findViewById(R.id.tabs);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (NoScrollViewPager) findViewById(R.id.viewpager);
         mTitle.add("全部");
         mTitle.add("计划");
         mTitle.add("工作");
@@ -165,12 +184,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+                else
+                {
+                    this.exitApp();
+                }
+            }
+            return true;
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    private void exitApp() {
+        // 判断2次点击事件时间
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        } else {
+            //finish();
+            ExitUtil.getInstance().addActivity(this);
+            ExitUtil.getInstance().exit();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            ExitUtil.getInstance().addActivity(this);
+            ExitUtil.getInstance().exit();
         }
     }
 
@@ -189,7 +240,8 @@ public class MainActivity extends AppCompatActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.toolbar_search:
-
+                Intent intent = new Intent(MainActivity.this, SearchDateActivity.class);
+                startActivity(intent);
                 break;
             default:
         }

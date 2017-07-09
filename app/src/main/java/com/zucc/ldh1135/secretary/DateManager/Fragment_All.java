@@ -1,5 +1,7 @@
 package com.zucc.ldh1135.secretary.DateManager;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -13,22 +15,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
-import com.zucc.ldh1135.secretary.Database;
+import com.melnykov.fab.FloatingActionButton;
+import com.zucc.ldh1135.secretary.DataBase.Database;
 import com.zucc.ldh1135.secretary.R;
+import com.zucc.ldh1135.secretary.Util.CurrentTime;
 
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import java.util.Date;
 import java.util.List;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import static android.content.Context.ALARM_SERVICE;
 
 /**
  * Created by Loading~ on 2017/7/4.
@@ -44,7 +47,16 @@ public class Fragment_All extends Fragment {
     long days_dif;
     DateNote date_event;
     private Calendar cal;
-    private int year,month,day;
+    private int year,month,day,hour,minute;
+    int rings,shake,flag;
+    String alarm_time;
+    long startTime;
+
+    Intent intent;
+    PendingIntent pi;
+    AlarmManager am;
+
+    Date date_now,date_note;
 
     private List<DateNote> dateList = new ArrayList<>();
 
@@ -65,15 +77,19 @@ public class Fragment_All extends Fragment {
                 id = cursor.getInt(cursor.getColumnIndex("id"));
                 title = cursor.getString(cursor.getColumnIndex("title"));
                 date = cursor.getString(cursor.getColumnIndex("time"));
+                rings = cursor.getInt(cursor.getColumnIndex("rings"));
+                shake = cursor.getInt(cursor.getColumnIndex("shake"));
+                flag = cursor.getInt(cursor.getColumnIndex("flag"));
+                alarm_time = cursor.getString(cursor.getColumnIndex("alarm_time"));
 
                 try
                 {
-                    SimpleDateFormat formart= new SimpleDateFormat("yyyy-MM-dd");
-                    //记录时间
-                    java.util.Date date_note = formart.parse(date);
-                    //当前时间
-                    java.util.Date date_now = formart.parse(String.valueOf(year)+"-"+String.valueOf(month)+"-"+String.valueOf(day));
-                    days_dif =  (date_note.getTime() - date_now.getTime()) / (1000 * 60 * 60 * 24);
+                    SimpleDateFormat formart= new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+                    date_now = formart.parse(new CurrentTime().getCurrentTime());
+                    date_note = formart.parse(date + " " + alarm_time);
+
+                    startTime = date_note.getTime();
                 }
                 catch (Exception e)
                 {
@@ -83,20 +99,58 @@ public class Fragment_All extends Fragment {
                 date_event = new DateNote(id,title,date,days_dif);
                 dateList.add(date_event);
 
+                if(flag == 1)
+                {
+                    if(date_now.getTime()>date_note.getTime())
+                    {
+                        startTime += 24*60*60*1000;
+                    }
+                    intent = new Intent("ALARM_CLOCK");
+                    intent.putExtra("title",title);
+                    intent.putExtra("time",date);
+                    intent.putExtra("rings",rings);
+                    intent.putExtra("shake",shake);
+                    intent.putExtra("id",id);
+                    //sendBroadcast(intent);
+                    pi = PendingIntent.getBroadcast(getActivity(),0,intent,0);
+                    am = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                    am.set(AlarmManager.RTC_WAKEUP,startTime,pi);
+                }
+
             }while(cursor.moveToNext());
         }
 
         cursor.close();
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_all);
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.attachToRecyclerView(recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         DateAdapter dateAdapter = new DateAdapter(dateList);
         recyclerView.setAdapter(dateAdapter);
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),AddDateActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
 
         return view;
     }
+
+    //
+    //
+    //
+    //
+    //
+    //
+    // create
 
     //获取当前日期
     private void getDate() {
@@ -104,7 +158,10 @@ public class Fragment_All extends Fragment {
         year=cal.get(Calendar.YEAR);       //获取年月日时分秒
         month=cal.get(Calendar.MONTH)+1;   //获取到的月份是从0开始计数
         day=cal.get(Calendar.DAY_OF_MONTH);
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+        minute = cal.get(Calendar.MINUTE);
     }
+
 
     private class DateNote{
         String title;

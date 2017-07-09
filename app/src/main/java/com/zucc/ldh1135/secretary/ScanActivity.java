@@ -1,9 +1,12 @@
 package com.zucc.ldh1135.secretary;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -73,15 +76,31 @@ public class ScanActivity extends AppCompatActivity implements QRCodeView.Delega
         vibrate();//震动
         mQRCodeView.stopSpot();
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("结果");
+        builder.setIcon(R.drawable.icon_error);
+        builder.setMessage(result);
+        builder.setPositiveButton("确定",null);
+
         if (!TextUtils.isEmpty(result)) {
             mQRCodeView.stopCamera();
             mQRCodeView.onDestroy();
 
-            Intent intent = new Intent(ScanActivity.this, MainActivity.class);
-            intent.putExtra("url", result);
-            //intent.setData(Uri.parse(result));
-            startActivity(intent);
-            finish();
+            if(result.length()>=8)
+            {
+                if(result.substring(0,7).equals("http://") || result.substring(0,8).equals("https://"))
+                {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    //intent.putExtra("url", result);
+                    intent.setData(Uri.parse(result));
+                    startActivity(intent);
+                }
+            }
+            else
+            {
+                builder.show().setCanceledOnTouchOutside(false);
+            }
+            //finish();
         } else {
             Toast.makeText(this, "链接无效,请重新扫描", Toast.LENGTH_SHORT).show();
             mQRCodeView.startSpot();

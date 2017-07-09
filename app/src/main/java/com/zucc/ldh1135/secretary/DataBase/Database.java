@@ -1,4 +1,4 @@
-package com.zucc.ldh1135.secretary;
+package com.zucc.ldh1135.secretary.DataBase;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,8 +17,12 @@ public class Database extends SQLiteOpenHelper {
             + "id integer primary key autoincrement, "
             + "title text, "    //事件标题
             + "time text, "    //时间
-            + "type text,"
-            + "priority integer," //优先级
+            + "type text, "
+            + "priority integer, " //优先级
+            + "flag integer, "   //是否开启闹钟
+            + "alarm_time text, "  //闹钟时间
+            + "shake integer, "
+            + "rings integer,"
             + "event text) ";   //事件内容
 
     private static final String CREATE_NOTEPAD = "create table Notepad ("
