@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -294,6 +295,12 @@ public class AlarmActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.toolbar_save:
+                if(TextUtils.isEmpty(tv_rings.getText()))
+                {
+                    new AlertDialog.Builder(this).setTitle("提示").setMessage("请选择铃声！")
+                            .setPositiveButton("好的",null).show().setCanceledOnTouchOutside(false);
+                    break;
+                }
                 Intent intent = new Intent();
                 intent.putExtra("hour", String.valueOf(tp_hour));
                 intent.putExtra("minute", String.valueOf(tp_minute));

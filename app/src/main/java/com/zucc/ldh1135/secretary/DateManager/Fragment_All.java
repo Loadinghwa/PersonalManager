@@ -15,10 +15,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.melnykov.fab.FloatingActionButton;
+import com.zucc.ldh1135.secretary.AlarmClockManager.AlarmService;
 import com.zucc.ldh1135.secretary.DataBase.Database;
+import com.zucc.ldh1135.secretary.MainActivity;
 import com.zucc.ldh1135.secretary.R;
 import com.zucc.ldh1135.secretary.Util.CurrentTime;
 
@@ -82,40 +85,48 @@ public class Fragment_All extends Fragment {
                 flag = cursor.getInt(cursor.getColumnIndex("flag"));
                 alarm_time = cursor.getString(cursor.getColumnIndex("alarm_time"));
 
+                cal = Calendar.getInstance();
+                year = cal.get(Calendar.YEAR);
+                month = cal.get(Calendar.MONTH)+1;
+                day = cal.get(Calendar.DAY_OF_MONTH);
+
+
                 try
                 {
-                    SimpleDateFormat formart= new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-                    date_now = formart.parse(new CurrentTime().getCurrentTime());
-                    date_note = formart.parse(date + " " + alarm_time);
+                    SimpleDateFormat formart= new SimpleDateFormat("yyyy-MM-dd");
+                    //记录时间
+                    java.util.Date date_note = formart.parse(date);
+                    java.util.Date date_now = new Date();
+                    //当前时间
+                    if(month<10&&day<10)
+                    {
+                        date_now = formart.parse(String.valueOf(year)+"-0"+String.valueOf(month)+"-0"+String.valueOf(day));
+                    }
+                    else if(month<10&&day>=10)
+                    {
+                        date_now = formart.parse(String.valueOf(year)+"-0"+String.valueOf(month)+"-"+String.valueOf(day));
+                    }
+                    else if(month>=10&&day<10)
+                    {
+                        date_now = formart.parse(String.valueOf(year)+"-"+String.valueOf(month)+"-0"+String.valueOf(day));
+                    }
+                    else if(month>=10&&day>=10)
+                    {
+                        date_now = formart.parse(String.valueOf(year)+"-"+String.valueOf(month)+"-"+String.valueOf(day));
+                    }
 
-                    startTime = date_note.getTime();
+                    days_dif =  (date_note.getTime() - date_now.getTime()) / (1000 * 60 * 60 * 24);
+
                 }
                 catch (Exception e)
                 {
 
                 }
 
+
                 date_event = new DateNote(id,title,date,days_dif);
                 dateList.add(date_event);
-
-                if(flag == 1)
-                {
-                    if(date_now.getTime()>date_note.getTime())
-                    {
-                        startTime += 24*60*60*1000;
-                    }
-                    intent = new Intent("ALARM_CLOCK");
-                    intent.putExtra("title",title);
-                    intent.putExtra("time",date);
-                    intent.putExtra("rings",rings);
-                    intent.putExtra("shake",shake);
-                    intent.putExtra("id",id);
-                    //sendBroadcast(intent);
-                    pi = PendingIntent.getBroadcast(getActivity(),0,intent,0);
-                    am = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
-                    am.set(AlarmManager.RTC_WAKEUP,startTime,pi);
-                }
 
             }while(cursor.moveToNext());
         }

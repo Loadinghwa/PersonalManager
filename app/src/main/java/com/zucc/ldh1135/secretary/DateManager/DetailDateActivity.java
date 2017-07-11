@@ -485,7 +485,7 @@ public class DetailDateActivity extends AppCompatActivity {
 
                 }
 
-                /*
+
                 //判断是否开启提醒服务
                 if(switch_notice.isChecked())
                 {
@@ -501,7 +501,7 @@ public class DetailDateActivity extends AppCompatActivity {
                     am = (AlarmManager) getSystemService(ALARM_SERVICE);
                     am.set(AlarmManager.RTC_WAKEUP,startTime,pi);
                 }
-                */
+
 
                 values.put("title",title);
                 values.put("time",time);
@@ -533,7 +533,22 @@ public class DetailDateActivity extends AppCompatActivity {
                     rings = data.getIntExtra("rings",0);
                     shake = data.getIntExtra("shake",0);
 
-                    tv_alarm.setText(data.getStringExtra("hour") + ":" + data.getStringExtra("minute"));
+                    if(tp_hour<10&&tp_minute<10)
+                    {
+                        tv_alarm.setText("0" + tp_hour + ":0" + tp_minute);
+                    }
+                    else if(tp_hour<10&&tp_minute>=10)
+                    {
+                        tv_alarm.setText("0" + tp_hour + ":" + tp_minute);
+                    }
+                    else if(tp_hour>=10&&tp_minute<10)
+                    {
+                        tv_alarm.setText(tp_hour + ":0" + tp_minute);
+                    }
+                    else
+                    {
+                        tv_alarm.setText(tp_hour + ":" + tp_minute);
+                    }
                 }
                 break;
         }

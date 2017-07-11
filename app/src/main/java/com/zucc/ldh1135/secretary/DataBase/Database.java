@@ -27,7 +27,8 @@ public class Database extends SQLiteOpenHelper {
 
     private static final String CREATE_NOTEPAD = "create table Notepad ("
             + "id integer primary key autoincrement, "
-            + "balance integer, "  //收支数额
+            + "content text,"       //收支内容
+            + "number text, "  //收支数额
             + "type text, "   //收支类型
             + "date text)";     //收支日期
 

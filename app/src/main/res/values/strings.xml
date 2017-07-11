@@ -46,4 +46,10 @@
     <string name="string_null">无</string>
     <string name="rings_default">千军万马</string>
     <string name="date_search">请输入搜索的日程标题</string>
+    <string name="balance_income">收入</string>
+    <string name="balance_expand">支出</string>
+    <string name="add_balance_content">收支内容</string>
+    <string name="add_balance_number">收支金额</string>
+    <string name="add_balance_input_content">点击这里输入收支的内容</string>
+    <string name="add_balance_input_number">点击这里输入收支的金额</string>
 </resources>

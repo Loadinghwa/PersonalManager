@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.melnykov.fab.FloatingActionButton;
 import com.zucc.ldh1135.secretary.AlarmClockManager.AlarmClockActivity;
+import com.zucc.ldh1135.secretary.AlarmClockManager.AlarmService;
 import com.zucc.ldh1135.secretary.BalanceManager.BalanceActivity;
 import com.zucc.ldh1135.secretary.DataBase.Database;
 import com.zucc.ldh1135.secretary.DateManager.AddDateActivity;
@@ -114,7 +115,8 @@ public class MainActivity extends AppCompatActivity {
         database = new Database(this,"Database.db",null,database_version);
         database.getWritableDatabase();
 
-
+        Intent i = new Intent(this, AlarmService.class);
+        startService(i);
 
     }
 
