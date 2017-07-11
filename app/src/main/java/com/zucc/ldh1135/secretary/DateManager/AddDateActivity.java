@@ -442,7 +442,7 @@ public class AddDateActivity extends AppCompatActivity {
 
                 cursor.close();
 
-
+                /*
                 //判断是否开启提醒服务
                 if(switch_notice.isChecked())
                 {
@@ -458,6 +458,7 @@ public class AddDateActivity extends AppCompatActivity {
                     am = (AlarmManager) getSystemService(ALARM_SERVICE);
                     am.set(AlarmManager.RTC_WAKEUP,startTime,pi);
                 }
+                */
 
 
                 values.put("title",title);

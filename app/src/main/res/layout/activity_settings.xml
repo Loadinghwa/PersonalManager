@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.zucc.ldh1135.secretary.DateManager.AddDateActivity">
@@ -24,4 +25,40 @@
 
     </android.support.design.widget.AppBarLayout>
 
-</RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/frame_language"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/border">
+
+            <TextView
+                android:id="@+id/app_language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_language"
+                android:textSize="20sp"
+                android:textColor="@color/colorBlack"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/simple_chinese"
+                android:textSize="20sp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="16dp"/>
+
+        </FrameLayout>
+
+    </ScrollView>
+
+
+
+</LinearLayout>

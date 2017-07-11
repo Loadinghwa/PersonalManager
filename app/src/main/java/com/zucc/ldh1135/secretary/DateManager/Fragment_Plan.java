@@ -1,6 +1,7 @@
 package com.zucc.ldh1135.secretary.DateManager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.zucc.ldh1135.secretary.DataBase.Database;
 import com.zucc.ldh1135.secretary.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -30,7 +32,13 @@ public class Fragment_Plan extends Fragment {
     private Database dbHelper;
 
     String title,date,type;
+    int id;
+    long days_dif;
     DateNote date_event;
+    private Calendar cal;
+    private int year,month,day,hour,minute;
+    int rings,shake,flag;
+    String alarm_time;
 
     private List<DateNote> dateList = new ArrayList<>();
 
@@ -43,12 +51,18 @@ public class Fragment_Plan extends Fragment {
         Cursor cursor = db.query("Date",null,null,null,null,null,null);
         if(cursor.moveToFirst()){
             do{
+                id = cursor.getInt(cursor.getColumnIndex("id"));
                 title = cursor.getString(cursor.getColumnIndex("title"));
                 date = cursor.getString(cursor.getColumnIndex("time"));
+                rings = cursor.getInt(cursor.getColumnIndex("rings"));
+                shake = cursor.getInt(cursor.getColumnIndex("shake"));
+                flag = cursor.getInt(cursor.getColumnIndex("flag"));
+                alarm_time = cursor.getString(cursor.getColumnIndex("alarm_time"));
                 type = cursor.getString(cursor.getColumnIndex("type"));
+
                 if(type.equals("计划"))
                 {
-                    date_event = new DateNote(title,date);
+                    date_event = new DateNote(id,title,date,days_dif);
                     dateList.add(date_event);
                 }
             }while(cursor.moveToNext());
@@ -65,22 +79,27 @@ public class Fragment_Plan extends Fragment {
         return view;
     }
 
+    //获取当前日期
+    private void getDate() {
+        cal= Calendar.getInstance();
+        year=cal.get(Calendar.YEAR);       //获取年月日时分秒
+        month=cal.get(Calendar.MONTH)+1;   //获取到的月份是从0开始计数
+        day=cal.get(Calendar.DAY_OF_MONTH);
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+        minute = cal.get(Calendar.MINUTE);
+    }
+
     private class DateNote{
         String title;
         String date;
-        String type;
-        String event;
+        int id;
+        long dif;
 
-        private DateNote(String title,String date){
+        private DateNote(int id,String title,String date,long dif){
+            this.id = id;
             this.title = title;
             this.date = date;
-        }
-
-        private DateNote(String title,String date,String type,String event){
-            this.title = title;
-            this.date = date;
-            this.type = type;
-            this.event = event;
+            this.dif = dif;
         }
 
         public String getTitle(){
@@ -91,12 +110,12 @@ public class Fragment_Plan extends Fragment {
             return date;
         }
 
-        public String getType(){
-            return type;
+        public int getId(){
+            return id;
         }
 
-        public String getEvent(){
-            return event;
+        public long getDif(){
+            return dif;
         }
     }
 
@@ -111,6 +130,7 @@ public class Fragment_Plan extends Fragment {
             View dateView;
             TextView tv_title;
             TextView tv_date;
+            TextView tv_dif;
 
             public ViewHolder(View view){
                 super(view);
@@ -118,6 +138,7 @@ public class Fragment_Plan extends Fragment {
                 dateView = view;
                 tv_title = (TextView) view.findViewById(R.id.tv_title);
                 tv_date = (TextView) view.findViewById(R.id.tv_date);
+                tv_dif = (TextView) view.findViewById(R.id.tv_time_difference);
             }
         }
 
@@ -137,7 +158,9 @@ public class Fragment_Plan extends Fragment {
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
                     DateNote date = mDateList.get(position);
-                    Toast.makeText(v.getContext(),date.getTitle(),Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(),DetailDateActivity.class);
+                    intent.putExtra("id",String.valueOf(date.getId()));
+                    startActivity(intent);
                 }
             });
 
@@ -149,6 +172,18 @@ public class Fragment_Plan extends Fragment {
             DateNote date = mDateList.get(position);
             holder.tv_title.setText(date.getTitle());
             holder.tv_date.setText(date.getDate());
+            if(date.getDif()<0)
+            {
+                holder.tv_dif.setText("过去"+ (-date.getDif()) +"天");
+            }
+            else if(date.getDif()>0)
+            {
+                holder.tv_dif.setText("还有"+ date.getDif() +"天");
+            }
+            else
+            {
+                holder.tv_dif.setText("就是今天");
+            }
             //Glide.with(mContext).load(date.getImageId()).into(holder.dateImage);
         }
 

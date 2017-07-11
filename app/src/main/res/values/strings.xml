@@ -52,4 +52,11 @@
     <string name="add_balance_number">收支金额</string>
     <string name="add_balance_input_content">点击这里输入收支的内容</string>
     <string name="add_balance_input_number">点击这里输入收支的金额</string>
+    <string name="date_type">日程类型</string>
+    <string name="date_title">日程标题</string>
+    <string name="date_priority">日程优先级</string>
+    <string name="balance_title">收支标题</string>
+    <string name="searchview_hint">请先选择查找</string>
+    <string name="app_language">语言</string>
+    <string name="simple_chinese">简体中文</string>
 </resources>

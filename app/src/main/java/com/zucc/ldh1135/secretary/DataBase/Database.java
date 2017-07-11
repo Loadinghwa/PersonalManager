@@ -32,6 +32,10 @@ public class Database extends SQLiteOpenHelper {
             + "type text, "   //收支类型
             + "date text)";     //收支日期
 
+    private static final String CREATE_LANGUAGE = "create  table Language ("
+            + "id integer primary key autoincrement, "
+            + "lang text)";
+
     private Context mContext;
 
     public Database(Context context, String name, SQLiteDatabase.CursorFactory factory,int version){
@@ -43,6 +47,7 @@ public class Database extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db){
         db.execSQL(CREATE_DATE);
         db.execSQL(CREATE_NOTEPAD);
+        db.execSQL(CREATE_LANGUAGE);
         Toast.makeText(mContext,"success!",Toast.LENGTH_SHORT).show();
     }
 
@@ -50,5 +55,6 @@ public class Database extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion){
         db.execSQL("drop table if exists DATE");
         db.execSQL("drop table if exists NOTEPAD");
+        db.execSQL("drop table if exists Language");
     }
 }

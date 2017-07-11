@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@drawable/bg_edittext_normal"
-        app:queryHint="@string/date_search">
+        android:queryHint="">
 
     </android.support.v7.widget.SearchView>
 

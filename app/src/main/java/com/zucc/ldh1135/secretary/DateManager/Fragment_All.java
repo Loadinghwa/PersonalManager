@@ -53,11 +53,6 @@ public class Fragment_All extends Fragment {
     private int year,month,day,hour,minute;
     int rings,shake,flag;
     String alarm_time;
-    long startTime;
-
-    Intent intent;
-    PendingIntent pi;
-    AlarmManager am;
 
     Date date_now,date_note;
 
@@ -84,12 +79,6 @@ public class Fragment_All extends Fragment {
                 shake = cursor.getInt(cursor.getColumnIndex("shake"));
                 flag = cursor.getInt(cursor.getColumnIndex("flag"));
                 alarm_time = cursor.getString(cursor.getColumnIndex("alarm_time"));
-
-                cal = Calendar.getInstance();
-                year = cal.get(Calendar.YEAR);
-                month = cal.get(Calendar.MONTH)+1;
-                day = cal.get(Calendar.DAY_OF_MONTH);
-
 
                 try
                 {

@@ -485,7 +485,7 @@ public class DetailDateActivity extends AppCompatActivity {
 
                 }
 
-
+                /*
                 //判断是否开启提醒服务
                 if(switch_notice.isChecked())
                 {
@@ -501,7 +501,15 @@ public class DetailDateActivity extends AppCompatActivity {
                     am = (AlarmManager) getSystemService(ALARM_SERVICE);
                     am.set(AlarmManager.RTC_WAKEUP,startTime,pi);
                 }
+                */
 
+                if(switch_notice.isChecked())
+                {
+                    flag = 1;
+                }
+                else {
+                    flag = 0;
+                }
 
                 values.put("title",title);
                 values.put("time",time);

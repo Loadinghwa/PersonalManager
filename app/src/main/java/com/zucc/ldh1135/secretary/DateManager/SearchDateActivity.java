@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +66,6 @@ public class SearchDateActivity extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.icon_back);
         }
 
-
         dbHelper = new Database(SearchDateActivity.this,"Database.db",null,database_version);
         /*
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -95,63 +96,23 @@ public class SearchDateActivity extends AppCompatActivity {
             }
         });
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            // 当搜索内容改变时触发该方法
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                if (!TextUtils.isEmpty(newText)){
-                    //listView.setFilterText(newText);
-                    SQLiteDatabase newDb = dbHelper.getWritableDatabase();
-                    Cursor newCursor = newDb.query("Date",new String[]{"id","title"},"title like '%" + newText + "%'",null,null,null,null);
-                    eventList.clear();
-                    if(newCursor.moveToFirst()){
-                        do{
-                            id = newCursor.getInt(newCursor.getColumnIndex("id"));
-                            title = newCursor.getString(newCursor.getColumnIndex("title"));
-
-                            eventList.add(new Event(id,title));
-
-                        }while(newCursor.moveToNext());
-                    }
-                    newCursor.close();
-
-                }
-                else
-                {
-                    listView.clearTextFilter();
-                    eventList.clear();
-                }
-                return false;
-            }
-
-        });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
-            case android.R.id.home:
-                finish();
-
-                break;
-        }
-        return true;
     }
 
     public class Event{
         int id;
         String title;
+        int priority;
 
         public Event(int id,String title)
         {
             this.id = id;
             this.title = title;
+        }
+
+        public Event(int id,int priority)
+        {
+            this.id = id;
+            this.priority = priority;
         }
 
         public int getId() {
@@ -160,6 +121,10 @@ public class SearchDateActivity extends AppCompatActivity {
 
         public String getTitle() {
             return title;
+        }
+
+        public int getPriority() {
+            return priority;
         }
     }
 
@@ -187,4 +152,137 @@ public class SearchDateActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.toolbar_search,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.date_title:
+                searchView.setQueryHint("请输入要搜索的日程标题");
+                //搜索日程标题
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    // 当搜索内容改变时触发该方法
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+
+                        if (!TextUtils.isEmpty(newText)){
+                            //listView.setFilterText(newText);
+                            SQLiteDatabase newDb = dbHelper.getWritableDatabase();
+                            Cursor newCursor = newDb.query("Date",new String[]{"id","title"},"title like '%" + newText + "%'",null,null,null,null);
+                            eventList.clear();
+                            if(newCursor.moveToFirst()){
+                                do{
+                                    id = newCursor.getInt(newCursor.getColumnIndex("id"));
+                                    title = newCursor.getString(newCursor.getColumnIndex("title"));
+
+                                    eventList.add(new Event(id,title));
+
+                                }while(newCursor.moveToNext());
+                            }
+                            newCursor.close();
+
+                        }
+                        else
+                        {
+                            listView.clearTextFilter();
+                            eventList.clear();
+                        }
+                        return false;
+                    }
+
+                });
+                break;
+            case R.id.date_priority:
+                searchView.setQueryHint("请输入要搜索日程相应的优先级：0/1/2/3");
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    // 当搜索内容改变时触发该方法
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+
+                        if (!TextUtils.isEmpty(newText)){
+                            //listView.setFilterText(newText);
+                            SQLiteDatabase newDb = dbHelper.getWritableDatabase();
+                            Cursor newCursor = newDb.query("Date",new String[]{"id","title"},"priority = " + Integer.parseInt(newText),null,null,null,null);
+                            eventList.clear();
+                            if(newCursor.moveToFirst()){
+                                do{
+                                    id = newCursor.getInt(newCursor.getColumnIndex("id"));
+                                    title = newCursor.getString(newCursor.getColumnIndex("title"));
+
+                                    eventList.add(new Event(id,title));
+
+                                }while(newCursor.moveToNext());
+                            }
+                            newCursor.close();
+
+                        }
+                        else
+                        {
+                            listView.clearTextFilter();
+                            eventList.clear();
+                        }
+                        return false;
+                    }
+
+                });
+                break;
+            case R.id.date_type:
+                searchView.setQueryHint("请输入要搜索的日程类型");
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    // 当搜索内容改变时触发该方法
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+
+                        if (!TextUtils.isEmpty(newText)){
+                            //listView.setFilterText(newText);
+                            SQLiteDatabase newDb = dbHelper.getWritableDatabase();
+                            Cursor newCursor = newDb.query("Date",new String[]{"id","title"},"type = " + newText,null,null,null,null);
+                            eventList.clear();
+                            if(newCursor.moveToFirst()){
+                                do{
+                                    id = newCursor.getInt(newCursor.getColumnIndex("id"));
+                                    title = newCursor.getString(newCursor.getColumnIndex("title"));
+
+                                    eventList.add(new Event(id,title));
+
+                                }while(newCursor.moveToNext());
+                            }
+                            newCursor.close();
+
+                        }
+                        else
+                        {
+                            listView.clearTextFilter();
+                            eventList.clear();
+                        }
+                        return false;
+                    }
+
+                });
+                break;
+        }
+        return true;
+    }
 }
